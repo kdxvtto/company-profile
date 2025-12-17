@@ -22,6 +22,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+const uploadsDir = path.join(__dirname, "../public/uploads");
+app.use("/uploads", express.static(uploadsDir));
 
 app.use("/api/users", userRoutes);
 app.use("/api/services", serviceRoutes);

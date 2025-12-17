@@ -20,14 +20,15 @@ export const getAllTeamProfiles = async (req, res) => {
 // Create team profile
 export const createTeamProfile= async (req,res) => {
     try{
-        const { name, position, image, facebook, instagram } = req.body;
+        const image = req.file ? `/uploads/${req.file.filename}` : null;
+        const { name, position, facebook, instagram } = req.body;
         if(!name || !position || !image) {
             return res.status(400).json({ 
                 success: false,
-                message: "All fields are required" 
+                message: "Name, position, and image are required" 
             });
         }
-        const existingTeamProfile = await TeamProfile.findOne({ name });
+        const existingTeamProfile = await TeamProfile.findOne({name: { $regex: new RegExp(`^${name}$`, "i") }});
         if(existingTeamProfile) {
             return res.status(400).json({
                 success: false,

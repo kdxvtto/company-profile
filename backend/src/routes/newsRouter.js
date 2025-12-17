@@ -3,12 +3,13 @@ import { createNews, getAllNews, getNewsById, updateNews, deleteNews } from "../
 import { validate } from "../middlewares/validate.js";
 import { createNewsSchema, updateNewsSchema } from "../validations/newsValidation.js";
 import verifyToken from "../middlewares/verifyToken.js";
+import upload from "../middlewares/upload.js";
 
 const router = express.Router();
 
 router.get("/", getAllNews);
 router.get("/:id", getNewsById);
-router.post("/", verifyToken, validate(createNewsSchema), createNews);
+router.post("/", verifyToken,upload.single("image"), validate(createNewsSchema), createNews);
 router.put("/:id", verifyToken, validate(updateNewsSchema), updateNews);
 router.delete("/:id", verifyToken, deleteNews);
 

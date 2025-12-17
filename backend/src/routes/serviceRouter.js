@@ -3,11 +3,12 @@ import  {createService, getAllServices, updateService, deleteService} from "../c
 import { validate } from "../middlewares/validate.js";
 import { createServicesSchema, updateServicesSchema } from "../validations/serviceValidation.js";
 import verifyToken from "../middlewares/verifyToken.js";
+import upload from "../middlewares/upload.js";
 
 const router = express.Router();
 
 router.get("/", getAllServices);
-router.post("/", verifyToken, validate(createServicesSchema), createService);
+router.post("/", verifyToken, upload.single("image"), validate(createServicesSchema), createService);
 router.put("/:id", verifyToken, validate(updateServicesSchema), updateService);
 router.delete("/:id", verifyToken, deleteService);
 

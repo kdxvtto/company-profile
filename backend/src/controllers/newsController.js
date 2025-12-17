@@ -39,14 +39,15 @@ export const getNewsById = async (req, res) => {
 // Create news
 export const createNews = async (req,res) => {
     try{
-        const { title, content, image, date } = req.body;
+        const image = req.file ? `/uploads/${req.file.filename}` : null;
+        const { title, content, date } = req.body;
         if(!title || !content || !image) {
             return res.status(400).json({ 
                 success: false,
                 message: "All fields are required" 
             });
         }
-        const news = new News({ title, content, image });
+        const news = new News({ title, content, image, date });
         const newNews = await news.save();
         res.status(201).json({
             success: true,

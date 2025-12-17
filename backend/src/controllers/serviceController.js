@@ -21,7 +21,8 @@ export const getAllServices = async (req, res) => {
 // Before: const { title, content, image } = req.body; tanpa field content di schema -> content tidak tersimpan.
 export const createService = async (req,res) => {
     try{
-        const { title, content, image } = req.body;
+        const image = req.file ? `/uploads/${req.file.filename}` : null;
+        const { title, content} = req.body;
         if(!title || !content || !image) {
             return res.status(400).json({ 
                 success: false,

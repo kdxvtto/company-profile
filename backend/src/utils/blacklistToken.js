@@ -6,9 +6,6 @@ export const blacklistToken = (token) => {
   try{
     
     const verify = jwt.verify(token, process.env.JWT_SECRET);
-    if (!verify) {
-      return;
-    }
 
     const expiresAt = verify?.exp
       ? verify.exp * 1000
