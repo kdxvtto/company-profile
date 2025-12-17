@@ -1,10 +1,10 @@
 // Wrong before: nama import/instansiasi bentrok (const teamProfile = new teamProfile) dan kapitalisasi model.
-import teamProfile from "../models/teamProfile.js";
+import TeamProfile from "../models/teamProfile.js";
 
 // Get all team profiles
 export const getAllTeamProfiles = async (req, res) => {
     try {
-        const teamProfiles = await teamProfile.find();
+        const teamProfiles = await TeamProfile.find();
         res.status(200).json({
             success: true,
             data : teamProfiles
@@ -27,14 +27,14 @@ export const createTeamProfile= async (req,res) => {
                 message: "All fields are required" 
             });
         }
-        const existingTeamProfile = await teamProfile.findOne({ name });
+        const existingTeamProfile = await TeamProfile.findOne({ name });
         if(existingTeamProfile) {
             return res.status(400).json({
                 success: false,
                 message: "Team profile already exists" 
             });
         }
-        const teamProfile = new teamProfile({ name, position, image, facebook, instagram });
+        const teamProfile = new TeamProfile({ name, position, image, facebook, instagram });
         const newTeamProfile = await teamProfile.save();
         res.status(201).json({
             success: true,
@@ -51,7 +51,7 @@ export const createTeamProfile= async (req,res) => {
 // Update team profile
 export const updateTeamProfile = async (req,res) => {
     try {
-        const teamProfile = await teamProfile.findByIdAndUpdate(
+        const teamProfile = await TeamProfile.findByIdAndUpdate(
         req.params.id,
         req.body, {
             new : true,
@@ -79,7 +79,7 @@ export const updateTeamProfile = async (req,res) => {
 export const deleteTeamProfile = async (req,res) => {
     try{
         const { id } = req.params;
-        const teamProfile = await teamProfile.findByIdAndDelete(id);
+        const teamProfile = await TeamProfile.findByIdAndDelete(id);
         if(!teamProfile) {
             return res.status(404).json({
                 success: false,

@@ -25,10 +25,12 @@ export const register = async (req, res) => {
 
     const user = new User({ name, email, password });
     const newUser = await user.save();
+    const safeUser = newUser.toObject();
+    delete safeUser.password;
 
     return res.status(201).json({
       success: true,
-      data: newUser,
+      data: safeUser,
     });
   } catch (error) {
     return res.status(500).json({
@@ -76,10 +78,12 @@ export const login = async (req, res) => {
     const token = jwt.sign({ id: user._id }, jwtSecret, {
       expiresIn: "1h",
     });
+    const safeUser = user.toObject();
+    delete safeUser.password;
 
     return res.status(200).json({
       success: true,
-      data: user,
+      data: safeUser,
       token,
     });
   } catch (error) {
