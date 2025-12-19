@@ -1,4 +1,5 @@
 import Services from "../models/Services.js";
+import { removeFile } from "../utils/file.js";
 
 // Get all services
 export const getAllServices = async (req, res) => {
@@ -20,10 +21,12 @@ export const getAllServices = async (req, res) => {
 // Wrong before: model Services tidak punya field content, sementara controller mengharuskan content.
 // Before: const { title, content, image } = req.body; tanpa field content di schema -> content tidak tersimpan.
 export const createService = async (req,res) => {
+    const image = req.file ? `/uploads/${req.file.filename}` : null;
     try{
-        const image = req.file ? `/uploads/${req.file.filename}` : null;
         const { title, content} = req.body;
         if(!title || !content || !image) {
+            // Jangan biarkan file tersisa jika payload tidak lengkap
+            if(image) await removeFile(image);
             return res.status(400).json({ 
                 success: false,
                 message: "All fields are required" 
@@ -36,6 +39,7 @@ export const createService = async (req,res) => {
             data : newService
         });
     } catch (error) {
+        if(image) await removeFile(image);
         res.status(500).json({ 
             success: false,
             message: error.message 
@@ -45,24 +49,36 @@ export const createService = async (req,res) => {
 
 // Update service
 export const updateService = async (req,res) => {
+    const newImage = req.file ? `/uploads/${req.file.filename}` : null;
     try {
-        const service = await Services.findByIdAndUpdate(
-        req.params.id,
-        req.body, {
-            new : true,
-            runValidators : true
-        });
+        const service = await Services.findById(req.params.id);
         if(!service) {
+            if(newImage) await removeFile(newImage);
             return res.status(404).json({
                 success: false,
                 message: "Service not found" 
             });
         }
+
+        const oldImage = service.image;
+        if(newImage) {
+            service.image = newImage;
+        }
+        Object.assign(service, req.body);
+        await service.save();
+
+        // Update berhasil, hapus gambar lama jika diganti
+        if(newImage && oldImage) {
+            await removeFile(oldImage);
+        }
+
         res.status(200).json({
             success: true,
             data : service
         });
     } catch (error) {
+        // Jika gagal simpan, bersihkan file baru
+        if(newImage) await removeFile(newImage);
         res.status(500).json({ 
             success: false,
             message: error.message 
@@ -81,6 +97,7 @@ export const deleteService = async (req,res) => {
                 message: "Service not found" 
             });
         }
+        if(service.image) await removeFile(service.image);
         res.status(200).json({
             success: true,
             data : service

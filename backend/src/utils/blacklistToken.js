@@ -22,7 +22,7 @@ export const blacklistToken = (token) => {
       clearTimeout(existingTimer);
     }
 
-    const timer = setTimeout(() => {
+    const timer = setTimeout(()  => {
       blacklistedTokens.delete(token);
     }, ttl);
 

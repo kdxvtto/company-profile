@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import express from "express";
-import cors from "cors";
+import { globalRateLimiter } from "./middlewares/rateLimiter.js";
+import { corsMiddleware } from "./middlewares/cors.js";
+import { helmetMiddleware } from "./middlewares/helmet.js";
 import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -15,13 +17,17 @@ import newsRoutes from "./routes/newsRouter.js";
 import creditUserRoutes from "./routes/creditUserRouter.js";
 import teamProfileRoutes from "./routes/teamProfileRouter.js";
 import authRoutes from "./routes/authRouter.js";
+import { errorHandler, notFoundHandler } from "./middlewares/errorHandler.js";
 
 const app = express();
 
 
-app.use(cors());
+app.use(helmetMiddleware);
+app.use(corsMiddleware);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(globalRateLimiter);
+
 const uploadsDir = path.join(__dirname, "../public/uploads");
 app.use("/uploads", express.static(uploadsDir));
 
@@ -31,6 +37,9 @@ app.use("/api/news", newsRoutes);
 app.use("/api/credit-users", creditUserRoutes);
 app.use("/api/team-profiles", teamProfileRoutes);
 app.use("/api/auth", authRoutes);
+
+app.use(notFoundHandler);
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
 

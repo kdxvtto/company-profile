@@ -4,7 +4,7 @@ import { z } from "zod";
 const teamProfileSchema = z.object({
     name: z.string().min(3, "Nama tim wajib diisi"),
     position: z.string().min(3, "Posisi wajib diisi"),
-    image: z.string().min(3, "Gambar wajib diisi"),
+    image: z.string().min(3, "Gambar wajib diisi").optional(),
     facebook: z.string().url("Facebook harus berupa URL").optional(),
     instagram: z.string().url("Instagram harus berupa URL").optional(),
 });

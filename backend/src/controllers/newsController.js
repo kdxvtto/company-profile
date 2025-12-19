@@ -1,4 +1,5 @@
 import News from "../models/News.js";
+import { removeFile } from "../utils/file.js";
 
 // Get all news
 export const getAllNews = async (req, res) => {
@@ -38,10 +39,12 @@ export const getNewsById = async (req, res) => {
 
 // Create news
 export const createNews = async (req,res) => {
+    const image = req.file ? `/uploads/${req.file.filename}` : null;
     try{
-        const image = req.file ? `/uploads/${req.file.filename}` : null;
         const { title, content, date } = req.body;
         if(!title || !content || !image) {
+            // Jika payload kurang, hapus file yang terlanjur di-upload
+            if(image) await removeFile(image);
             return res.status(400).json({ 
                 success: false,
                 message: "All fields are required" 
@@ -54,6 +57,7 @@ export const createNews = async (req,res) => {
             data : newNews
         });
     } catch (error) {
+        if(image) await removeFile(image);
         res.status(500).json({ 
             success: false,
             message: error.message 
@@ -63,24 +67,36 @@ export const createNews = async (req,res) => {
 
 // Update news
 export const updateNews = async (req,res) => {
+    const newImage = req.file ? `/uploads/${req.file.filename}` : null;
     try {
-        const news = await News.findByIdAndUpdate(
-        req.params.id,
-        req.body, {
-            new : true,
-            runValidators : true
-        });
+        const news = await News.findById(req.params.id);
         if(!news) {
+            if(newImage) await removeFile(newImage);
             return res.status(404).json({
                 success: false,
                 message: "News not found" 
             });
         }
+
+        const oldImage = news.image;
+        if(newImage) {
+            news.image = newImage;
+        }
+        Object.assign(news, req.body);
+        await news.save();
+
+        // Setelah update sukses, hapus gambar lama jika ada pengganti
+        if(newImage && oldImage) {
+            await removeFile(oldImage);
+        }
+
         res.status(200).json({
             success: true,
             data : news
         });
     } catch (error) {
+        // Jika gagal simpan, bersihkan file baru
+        if(newImage) await removeFile(newImage);
         res.status(500).json({ 
             success: false,
             message: error.message 
@@ -99,6 +115,7 @@ export const deleteNews = async (req,res) => {
                 message: "News not found" 
             });
         }
+        if(news.image) await removeFile(news.image);
         res.status(200).json({
             success: true,
             data : news
