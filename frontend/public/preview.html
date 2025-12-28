@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KP Finance - Company Profile Preview</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", system-ui, sans-serif;
+        color: #1a1a1a;
+        background: #fff;
+        line-height: 1.6;
+      }
+
+      /* ========== NAVBAR ========== */
+      .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid #e5e7eb;
+        z-index: 100;
+        padding: 0 24px;
+      }
+
+      .navbar-inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 72px;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .logo-icon {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, #2563eb, #1d4ed8);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 700;
+        font-size: 14px;
+      }
+
+      .logo-text {
+        font-weight: 700;
+        font-size: 18px;
+        color: #1e3a8a;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 32px;
+      }
+
+      .nav-links a {
+        text-decoration: none;
+        color: #6b7280;
+        font-weight: 500;
+        font-size: 14px;
+        transition: color 0.2s;
+      }
+
+      .nav-links a:hover {
+        color: #2563eb;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #2563eb, #1d4ed8);
+        color: white;
+        padding: 12px 24px;
+        border-radius: 8px;
+        border: none;
+        font-weight: 500;
+        font-size: 14px;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+      }
+
+      /* ========== HERO ========== */
+      .hero {
+        padding: 160px 24px 100px;
+        background: linear-gradient(
+          135deg,
+          #f8fafc 0%,
+          #e0e7ff 50%,
+          #c7d2fe 100%
+        );
+        text-align: center;
+      }
+
+      .hero h1 {
+        font-size: 48px;
+        font-weight: 700;
+        color: #1e3a8a;
+        margin-bottom: 20px;
+        line-height: 1.2;
+      }
+
+      .hero p {
+        font-size: 18px;
+        color: #6b7280;
+        max-width: 600px;
+        margin: 0 auto 32px;
+      }
+
+      .hero-buttons {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+        margin-bottom: 60px;
+      }
+
+      .btn-outline {
+        background: transparent;
+        color: #2563eb;
+        padding: 12px 24px;
+        border-radius: 8px;
+        border: 2px solid #2563eb;
+        font-weight: 500;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .btn-outline:hover {
+        background: #2563eb;
+        color: white;
+      }
+
+      .stats {
+        display: flex;
+        justify-content: center;
+        gap: 48px;
+      }
+
+      .stat-item {
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(10px);
+        padding: 24px 32px;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      }
+
+      .stat-number {
+        font-size: 32px;
+        font-weight: 700;
+        color: #2563eb;
+      }
+
+      .stat-label {
+        font-size: 14px;
+        color: #6b7280;
+      }
+
+      /* ========== SERVICES ========== */
+      .services {
+        padding: 100px 24px;
+        background: #f8fafc;
+      }
+
+      .section-header {
+        text-align: center;
+        margin-bottom: 60px;
+      }
+
+      .section-header h2 {
+        font-size: 36px;
+        font-weight: 700;
+        color: #1e3a8a;
+        margin-bottom: 12px;
+      }
+
+      .section-header p {
+        font-size: 16px;
+        color: #6b7280;
+      }
+
+      .services-grid {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 24px;
+      }
+
+      .service-card {
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        transition: transform 0.3s, box-shadow 0.3s;
+        cursor: pointer;
+      }
+
+      .service-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+      }
+
+      .service-image {
+        height: 160px;
+        background: linear-gradient(135deg, #dbeafe, #c7d2fe);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 48px;
+      }
+
+      .service-content {
+        padding: 24px;
+      }
+
+      .service-content h3 {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #1e3a8a;
+      }
+
+      .service-content p {
+        font-size: 14px;
+        color: #6b7280;
+        margin-bottom: 16px;
+      }
+
+      .service-link {
+        color: #2563eb;
+        font-weight: 500;
+        font-size: 14px;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .service-link:hover {
+        text-decoration: underline;
+      }
+
+      /* ========== TEAM ========== */
+      .team {
+        padding: 100px 24px;
+        background: white;
+      }
+
+      .team-grid {
+        max-width: 1000px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 32px;
+      }
+
+      .team-card {
+        text-align: center;
+        padding: 32px 24px;
+      }
+
+      .team-photo {
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
+        margin: 0 auto 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 48px;
+        border: 4px solid white;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+      }
+
+      .team-card h3 {
+        font-size: 18px;
+        font-weight: 600;
+        color: #1e3a8a;
+        margin-bottom: 4px;
+      }
+
+      .team-card .position {
+        font-size: 14px;
+        color: #6b7280;
+        margin-bottom: 16px;
+      }
+
+      .social-links {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+      }
+
+      .social-links a {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: #f3f4f6;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #6b7280;
+        text-decoration: none;
+        transition: all 0.2s;
+        font-size: 14px;
+      }
+
+      .social-links a:hover {
+        background: #2563eb;
+        color: white;
+      }
+
+      /* ========== NEWS ========== */
+      .news {
+        padding: 100px 24px;
+        background: #f8fafc;
+      }
+
+      .news-header {
+        max-width: 1200px;
+        margin: 0 auto 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .news-header h2 {
+        font-size: 36px;
+        font-weight: 700;
+        color: #1e3a8a;
+      }
+
+      .news-header a {
+        color: #2563eb;
+        font-weight: 500;
+        text-decoration: none;
+      }
+
+      .news-grid {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+      }
+
+      .news-card {
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+
+      .news-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .news-image {
+        height: 180px;
+        background: linear-gradient(135deg, #dbeafe, #c7d2fe);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 48px;
+      }
+
+      .news-content {
+        padding: 24px;
+      }
+
+      .news-date {
+        display: inline-block;
+        background: #eff6ff;
+        color: #2563eb;
+        padding: 4px 10px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 500;
+        margin-bottom: 12px;
+      }
+
+      .news-content h3 {
+        font-size: 18px;
+        font-weight: 600;
+        color: #1e3a8a;
+        margin-bottom: 8px;
+      }
+
+      .news-content p {
+        font-size: 14px;
+        color: #6b7280;
+        margin-bottom: 16px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      /* ========== FOOTER ========== */
+      .footer {
+        background: #0f172a;
+        color: white;
+        padding: 60px 24px 24px;
+      }
+
+      .footer-inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 1fr;
+        gap: 48px;
+        margin-bottom: 48px;
+      }
+
+      .footer h4 {
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 20px;
+        color: #94a3b8;
+      }
+
+      .footer-about {
+        font-size: 14px;
+        color: #94a3b8;
+        line-height: 1.8;
+      }
+
+      .footer ul {
+        list-style: none;
+      }
+
+      .footer ul li {
+        margin-bottom: 12px;
+      }
+
+      .footer ul a {
+        color: #94a3b8;
+        text-decoration: none;
+        font-size: 14px;
+        transition: color 0.2s;
+      }
+
+      .footer ul a:hover {
+        color: white;
+      }
+
+      .footer-bottom {
+        border-top: 1px solid #1e293b;
+        padding-top: 24px;
+        text-align: center;
+        font-size: 14px;
+        color: #64748b;
+      }
+
+      /* ========== RESPONSIVE ========== */
+      @media (max-width: 768px) {
+        .nav-links {
+          display: none;
+        }
+
+        .hero h1 {
+          font-size: 32px;
+        }
+
+        .stats {
+          flex-direction: column;
+          gap: 16px;
+        }
+
+        .news-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .footer-inner {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+      <div class="navbar-inner">
+        <div class="logo">
+          <div class="logo-icon">KP</div>
+          <span class="logo-text">KP Finance</span>
+        </div>
+        <div class="nav-links">
+          <a href="#">Beranda</a>
+          <a href="#">Layanan</a>
+          <a href="#">Tim Kami</a>
+          <a href="#">Berita</a>
+        </div>
+        <button class="btn-primary">Ajukan Kredit →</button>
+      </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+      <h1>Solusi Kredit Terpercaya<br />untuk Masa Depan Anda</h1>
+      <p>
+        Proses cepat, bunga ringan, dan pelayanan yang mengutamakan kenyamanan
+        Anda. Wujudkan impian Anda bersama kami.
+      </p>
+      <div class="hero-buttons">
+        <button class="btn-primary">Ajukan Sekarang →</button>
+        <button class="btn-outline">Pelajari Lebih Lanjut</button>
+      </div>
+      <div class="stats">
+        <div class="stat-item">
+          <div class="stat-number">500+</div>
+          <div class="stat-label">Nasabah Aktif</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">98%</div>
+          <div class="stat-label">Tingkat Approval</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">24 Jam</div>
+          <div class="stat-label">Proses Cepat</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section class="services">
+      <div class="section-header">
+        <h2>Layanan Kami</h2>
+        <p>Berbagai pilihan kredit yang disesuaikan dengan kebutuhan Anda</p>
+      </div>
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-image">🏠</div>
+          <div class="service-content">
+            <h3>Kredit Umum</h3>
+            <p>
+              Pinjaman untuk berbagai keperluan dengan bunga kompetitif dan
+              tenor fleksibel hingga 36 bulan.
+            </p>
+            <a href="#" class="service-link">Selengkapnya →</a>
+          </div>
+        </div>
+        <div class="service-card">
+          <div class="service-image">💰</div>
+          <div class="service-content">
+            <h3>Kredit Sumeh</h3>
+            <p>
+              Pinjaman mikro hingga 2 juta rupiah dengan proses cepat dan
+              persyaratan mudah.
+            </p>
+            <a href="#" class="service-link">Selengkapnya →</a>
+          </div>
+        </div>
+        <div class="service-card">
+          <div class="service-image">📱</div>
+          <div class="service-content">
+            <h3>Kredit Elektronik</h3>
+            <p>
+              Pembiayaan untuk pembelian perangkat elektronik dengan cicilan
+              ringan.
+            </p>
+            <a href="#" class="service-link">Selengkapnya →</a>
+          </div>
+        </div>
+        <div class="service-card">
+          <div class="service-image">🏘️</div>
+          <div class="service-content">
+            <h3>Kredit Wonogiren</h3>
+            <p>
+              Program kredit khusus untuk warga Wonogiri dengan syarat dan
+              ketentuan spesial.
+            </p>
+            <a href="#" class="service-link">Selengkapnya →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TEAM -->
+    <section class="team">
+      <div class="section-header">
+        <h2>Tim Kami</h2>
+        <p>Profesional berpengalaman yang siap membantu Anda</p>
+      </div>
+      <div class="team-grid">
+        <div class="team-card">
+          <div class="team-photo">👨‍💼</div>
+          <h3>Budi Santoso</h3>
+          <p class="position">Direktur Utama</p>
+          <div class="social-links">
+            <a href="#">f</a>
+            <a href="#">ig</a>
+          </div>
+        </div>
+        <div class="team-card">
+          <div class="team-photo">👩‍💼</div>
+          <h3>Sari Dewi</h3>
+          <p class="position">Manager Operasional</p>
+          <div class="social-links">
+            <a href="#">f</a>
+            <a href="#">ig</a>
+          </div>
+        </div>
+        <div class="team-card">
+          <div class="team-photo">👨‍💻</div>
+          <h3>Andi Pratama</h3>
+          <p class="position">Analis Kredit</p>
+          <div class="social-links">
+            <a href="#">f</a>
+            <a href="#">ig</a>
+          </div>
+        </div>
+        <div class="team-card">
+          <div class="team-photo">👩‍🎤</div>
+          <h3>Maya Lestari</h3>
+          <p class="position">Customer Service</p>
+          <div class="social-links">
+            <a href="#">f</a>
+            <a href="#">ig</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NEWS -->
+    <section class="news">
+      <div class="news-header">
+        <h2>Berita Terbaru</h2>
+        <a href="#">Lihat Semua →</a>
+      </div>
+      <div class="news-grid">
+        <div class="news-card">
+          <div class="news-image">📰</div>
+          <div class="news-content">
+            <span class="news-date">23 Des 2024</span>
+            <h3>Program Kredit Akhir Tahun dengan Bunga Spesial</h3>
+            <p>
+              Dapatkan penawaran spesial untuk pengajuan kredit di bulan
+              Desember dengan bunga lebih ringan.
+            </p>
+            <a href="#" class="service-link">Baca Selengkapnya →</a>
+          </div>
+        </div>
+        <div class="news-card">
+          <div class="news-image">🎉</div>
+          <div class="news-content">
+            <span class="news-date">20 Des 2024</span>
+            <h3>KP Finance Raih Penghargaan Pelayanan Terbaik</h3>
+            <p>
+              Kami bangga mendapatkan penghargaan atas komitmen dalam memberikan
+              pelayanan terbaik.
+            </p>
+            <a href="#" class="service-link">Baca Selengkapnya →</a>
+          </div>
+        </div>
+        <div class="news-card">
+          <div class="news-image">📈</div>
+          <div class="news-content">
+            <span class="news-date">18 Des 2024</span>
+            <h3>Tips Mengelola Keuangan untuk Tahun Baru</h3>
+            <p>
+              Simak tips dan trik mengelola keuangan keluarga untuk menyambut
+              tahun baru yang lebih baik.
+            </p>
+            <a href="#" class="service-link">Baca Selengkapnya →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="footer-inner">
+        <div>
+          <div class="logo" style="margin-bottom: 20px">
+            <div class="logo-icon">KP</div>
+            <span class="logo-text" style="color: white">KP Finance</span>
+          </div>
+          <p class="footer-about">
+            KP Finance adalah lembaga keuangan terpercaya yang berkomitmen
+            memberikan solusi kredit terbaik untuk masyarakat.
+          </p>
+        </div>
+        <div>
+          <h4>LAYANAN</h4>
+          <ul>
+            <li><a href="#">Kredit Umum</a></li>
+            <li><a href="#">Kredit Sumeh</a></li>
+            <li><a href="#">Kredit Elektronik</a></li>
+            <li><a href="#">Kredit Wonogiren</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>PERUSAHAAN</h4>
+          <ul>
+            <li><a href="#">Tentang Kami</a></li>
+            <li><a href="#">Tim Kami</a></li>
+            <li><a href="#">Karir</a></li>
+            <li><a href="#">Kontak</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>HUBUNGI KAMI</h4>
+          <ul>
+            <li><a href="#">📍 Jl. Sudirman No. 123</a></li>
+            <li><a href="#">📞 (0273) 123-456</a></li>
+            <li><a href="#">✉️ info@kpfinance.com</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">© 2024 KP Finance. All rights reserved.</div>
+    </footer>
+  </body>
+</html>
