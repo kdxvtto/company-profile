@@ -43,7 +43,8 @@ export const getNewsById = async (req, res) => {
 
 // Create news
 export const createNews = async (req,res) => {
-    const image = req.file ? `/uploads/${req.file.filename}` : null;
+    // Cloudinary returns full URL in req.file.path
+    const image = req.file ? req.file.path : null;
     try{
         const { title, content, date, category } = req.body;
         if(!title || !content || !image) {
@@ -78,7 +79,8 @@ export const createNews = async (req,res) => {
 
 // Update news
 export const updateNews = async (req,res) => {
-    const newImage = req.file ? `/uploads/${req.file.filename}` : null;
+    // Cloudinary returns full URL in req.file.path
+    const newImage = req.file ? req.file.path : null;
     try {
         const { id } = req.params;
         if(!mongoose.Types.ObjectId.isValid(id)) {

@@ -49,7 +49,8 @@ export const getServiceById = async (req, res) => {
 
 // Create new service
 export const createService = async (req,res) => {
-    const image = req.file ? `/uploads/${req.file.filename}` : null;
+    // Cloudinary returns full URL in req.file.path
+    const image = req.file ? req.file.path : null;
     try{
         const { title, content, category } = req.body;
         if(!title || !content || !image) {
@@ -77,7 +78,8 @@ export const createService = async (req,res) => {
 
 // Update service
 export const updateService = async (req,res) => {
-    const newImage = req.file ? `/uploads/${req.file.filename}` : null;
+    // Cloudinary returns full URL in req.file.path
+    const newImage = req.file ? req.file.path : null;
     try {
         const { id } = req.params;
         if(!mongoose.Types.ObjectId.isValid(id)) {
