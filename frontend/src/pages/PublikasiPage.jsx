@@ -3,8 +3,8 @@ import { FileText, Download, BookOpen, ClipboardList } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 
-// Base URL untuk file dari backend
-const API_BASE_URL = 'http://localhost:3000';
+// Base URL untuk file dari website resmi
+const FILE_BASE_URL = 'https://bankwonogiri.co.id/public';
 
 const PublikasiPage = () => {
     const [activeTab, setActiveTab] = useState('laporan');
@@ -33,9 +33,9 @@ const PublikasiPage = () => {
         { id: 8, name: 'Manual Book WA Gateway', file: 'MANUAL BOOK WA GATEWAY.pdf', category: 'Aplikasi' },
     ];
 
-    // Function to download file
+    // Function to download file dari website resmi
     const handleDownload = (folder, filename) => {
-        const url = `${API_BASE_URL}/${folder}/${filename}`;
+        const url = `${FILE_BASE_URL}/${folder}/${encodeURIComponent(filename)}`;
         window.open(url, '_blank');
     };
 
