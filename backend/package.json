@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src/server.js",
+    "start:prod": "NODE_ENV=production node src/server.js",
     "dev": "nodemon src/server.js"
   },
   "keywords": [],
@@ -21,6 +22,7 @@
     "express-rate-limit": "^8.2.1",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
+    "mongodb": "^7.0.0",
     "mongoose": "^9.0.0",
     "multer": "^2.0.2",
     "zod": "^4.1.13"

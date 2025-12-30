@@ -10,7 +10,8 @@ import { fileURLToPath } from "url";
 // Wrong before: dotenv.config() dipanggil sebelum import (ESM error), sekarang di bawah import.
 // Also ensure .env is loaded from backend/.env even if process.cwd() bukan direktori backend.
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-dotenv.config({ path: path.resolve(__dirname, "../.env") });
+const envFile = process.env.NODE_ENV === "production" ? ".env.production" : ".env.local";
+dotenv.config({ path: path.resolve(__dirname, `../${envFile}`) });
 
 import userRoutes from "./routes/userRouter.js";
 import serviceRoutes from "./routes/serviceRouter.js";
