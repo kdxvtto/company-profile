@@ -5,6 +5,7 @@ import {
     Briefcase, 
     Newspaper, 
     UserCog,
+    FileText,
     Settings,
     LogOut
 } from 'lucide-react';
@@ -34,6 +35,11 @@ const Sidebar = () => {
             title: 'News',
             icon: Newspaper,
             path: '/admin/news',
+        },
+        {
+            title: 'Publications',
+            icon: FileText,
+            path: '/admin/publications',
         },
         {
             title: 'Users',

@@ -30,6 +30,7 @@ import Dashboard from './pages/admin/Dashboard';
 import TeamPage from './pages/admin/TeamPage';
 import ServicesPage from './pages/admin/ServicesPage';
 import NewsPage from './pages/admin/NewsPage';
+import AdminPublicationsPage from './pages/admin/PublicationsPage';
 import UsersPage from './pages/admin/UsersPage';
 import SettingsPage from './pages/admin/SettingsPage';
 
@@ -143,6 +144,10 @@ const router = createBrowserRouter([
             {
                 path: 'news',
                 element: <NewsPage />,
+            },
+            {
+                path: 'publications',
+                element: <AdminPublicationsPage />,
             },
             {
                 path: 'users',
