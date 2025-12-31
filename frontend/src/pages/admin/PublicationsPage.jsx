@@ -91,21 +91,21 @@ const PublicationsPage = () => {
     return (
         <div className="space-y-6">
             {/* Header */}
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                     <h1 className="text-2xl font-bold text-gray-900">Publications</h1>
                     <p className="text-gray-500">Kelola laporan dan manual book</p>
                 </div>
                 <button
                     onClick={openAddModal}
-                    className="flex items-center gap-2 bg-rose-600 text-white px-4 py-2 rounded-lg hover:bg-rose-700 transition-colors"
+                    className="flex items-center justify-center gap-2 bg-rose-600 text-white px-4 py-2 rounded-lg hover:bg-rose-700 transition-colors w-full sm:w-auto"
                 >
                     <Plus className="w-5 h-5" />
                     Tambah Publikasi
                 </button>
             </div>
 
-            {/* Table */}
+            {/* Content */}
             <div className="bg-white rounded-xl shadow-lg overflow-hidden">
                 {loading ? (
                     <div className="flex items-center justify-center py-12">
@@ -117,79 +117,140 @@ const PublicationsPage = () => {
                         <p>Belum ada publikasi</p>
                     </div>
                 ) : (
-                    <table className="w-full">
-                        <thead className="bg-gray-50 border-b">
-                            <tr>
-                                <th className="text-left p-4 font-medium text-gray-600">Nama</th>
-                                <th className="text-left p-4 font-medium text-gray-600">Kategori</th>
-                                <th className="text-left p-4 font-medium text-gray-600">Tanggal</th>
-                                <th className="text-left p-4 font-medium text-gray-600">File</th>
-                                <th className="text-right p-4 font-medium text-gray-600">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y">
+                    <>
+                        {/* Desktop Table - Hidden on mobile */}
+                        <div className="hidden md:block overflow-x-auto">
+                            <table className="w-full">
+                                <thead className="bg-gray-50 border-b">
+                                    <tr>
+                                        <th className="text-left p-4 font-medium text-gray-600">Nama</th>
+                                        <th className="text-left p-4 font-medium text-gray-600">Kategori</th>
+                                        <th className="text-left p-4 font-medium text-gray-600">Tanggal</th>
+                                        <th className="text-left p-4 font-medium text-gray-600">File</th>
+                                        <th className="text-right p-4 font-medium text-gray-600">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y">
+                                    {publications.map((pub) => (
+                                        <tr key={pub._id} className="hover:bg-gray-50">
+                                            <td className="p-4">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="w-10 h-10 bg-rose-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                                        <FileText className="w-5 h-5 text-rose-600" />
+                                                    </div>
+                                                    <span className="font-medium text-gray-900">{pub.name}</span>
+                                                </div>
+                                            </td>
+                                            <td className="p-4">
+                                                <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                                                    pub.category === 'Laporan' 
+                                                        ? 'bg-blue-100 text-blue-700' 
+                                                        : 'bg-green-100 text-green-700'
+                                                }`}>
+                                                    {pub.category}
+                                                </span>
+                                            </td>
+                                            <td className="p-4 text-gray-500">
+                                                {new Date(pub.createdAt).toLocaleDateString('id-ID')}
+                                            </td>
+                                            <td className="p-4">
+                                                {pub.file && pub.file[0] && (
+                                                    <a
+                                                        href={pub.file[0]}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="flex items-center gap-1 text-rose-600 hover:underline"
+                                                    >
+                                                        <Download className="w-4 h-4" />
+                                                        Download
+                                                    </a>
+                                                )}
+                                            </td>
+                                            <td className="p-4">
+                                                <div className="flex items-center justify-end gap-2">
+                                                    <button
+                                                        onClick={() => handleEdit(pub)}
+                                                        className="p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                                                    >
+                                                        <Pencil className="w-4 h-4" />
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleDelete(pub._id)}
+                                                        className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                                    >
+                                                        <Trash2 className="w-4 h-4" />
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {/* Mobile Cards - Visible only on mobile */}
+                        <div className="md:hidden divide-y">
                             {publications.map((pub) => (
-                                <tr key={pub._id} className="hover:bg-gray-50">
-                                    <td className="p-4">
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-10 h-10 bg-rose-100 rounded-lg flex items-center justify-center">
-                                                <FileText className="w-5 h-5 text-rose-600" />
-                                            </div>
-                                            <span className="font-medium text-gray-900">{pub.name}</span>
+                                <div key={pub._id} className="p-4 space-y-3">
+                                    {/* Header */}
+                                    <div className="flex items-start gap-3">
+                                        <div className="w-10 h-10 bg-rose-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                            <FileText className="w-5 h-5 text-rose-600" />
                                         </div>
-                                    </td>
-                                    <td className="p-4">
-                                        <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                                            pub.category === 'Laporan' 
-                                                ? 'bg-blue-100 text-blue-700' 
-                                                : 'bg-green-100 text-green-700'
-                                        }`}>
-                                            {pub.category}
-                                        </span>
-                                    </td>
-                                    <td className="p-4 text-gray-500">
-                                        {new Date(pub.createdAt).toLocaleDateString('id-ID')}
-                                    </td>
-                                    <td className="p-4">
+                                        <div className="flex-1 min-w-0">
+                                            <h3 className="font-medium text-gray-900 truncate">{pub.name}</h3>
+                                            <div className="flex items-center gap-2 mt-1">
+                                                <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                                                    pub.category === 'Laporan' 
+                                                        ? 'bg-blue-100 text-blue-700' 
+                                                        : 'bg-green-100 text-green-700'
+                                                }`}>
+                                                    {pub.category}
+                                                </span>
+                                                <span className="text-xs text-gray-500">
+                                                    {new Date(pub.createdAt).toLocaleDateString('id-ID')}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Actions */}
+                                    <div className="flex items-center gap-2">
                                         {pub.file && pub.file[0] && (
                                             <a
                                                 href={pub.file[0]}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="flex items-center gap-1 text-rose-600 hover:underline"
+                                                className="flex-1 flex items-center justify-center gap-2 bg-rose-600 text-white px-3 py-2 rounded-lg text-sm font-medium hover:bg-rose-700 transition-colors"
                                             >
                                                 <Download className="w-4 h-4" />
                                                 Download
                                             </a>
                                         )}
-                                    </td>
-                                    <td className="p-4">
-                                        <div className="flex items-center justify-end gap-2">
-                                            <button
-                                                onClick={() => handleEdit(pub)}
-                                                className="p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                                            >
-                                                <Pencil className="w-4 h-4" />
-                                            </button>
-                                            <button
-                                                onClick={() => handleDelete(pub._id)}
-                                                className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                                            >
-                                                <Trash2 className="w-4 h-4" />
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
+                                        <button
+                                            onClick={() => handleEdit(pub)}
+                                            className="p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                                        >
+                                            <Pencil className="w-5 h-5" />
+                                        </button>
+                                        <button
+                                            onClick={() => handleDelete(pub._id)}
+                                            className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                        >
+                                            <Trash2 className="w-5 h-5" />
+                                        </button>
+                                    </div>
+                                </div>
                             ))}
-                        </tbody>
-                    </table>
+                        </div>
+                    </>
                 )}
             </div>
 
             {/* Modal */}
             {isModalOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-                    <div className="bg-white rounded-xl shadow-2xl w-full max-w-md p-6 m-4">
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+                    <div className="bg-white rounded-xl shadow-2xl w-full max-w-md p-6">
                         <h2 className="text-xl font-bold mb-4">
                             {editingId ? 'Edit Publikasi' : 'Tambah Publikasi'}
                         </h2>
@@ -225,12 +286,12 @@ const PublicationsPage = () => {
                                     File PDF {editingId && '(kosongkan jika tidak ingin mengubah)'}
                                 </label>
                                 <div className="flex items-center gap-2 p-3 border-2 border-dashed rounded-lg hover:border-rose-500 transition-colors">
-                                    <Upload className="w-5 h-5 text-gray-400" />
+                                    <Upload className="w-5 h-5 text-gray-400 flex-shrink-0" />
                                     <input
                                         type="file"
                                         accept=".pdf"
                                         onChange={(e) => setFormData({ ...formData, file: e.target.files[0] })}
-                                        className="flex-1 text-sm"
+                                        className="flex-1 text-sm min-w-0"
                                         required={!editingId}
                                     />
                                 </div>
