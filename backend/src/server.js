@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import express from "express";
 import compression from "compression";
+import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import { globalRateLimiter } from "./middlewares/rateLimiter.js";
 import { corsMiddleware } from "./middlewares/cors.js";
@@ -28,6 +29,9 @@ const app = express();
 
 // Compression middleware for Gzip responses
 app.use(compression());
+
+// Request logging
+app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
 
 app.use(helmetMiddleware);
 app.use(corsMiddleware);

@@ -1,41 +1,52 @@
+import { lazy, Suspense } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
+import PageLoader from './components/PageLoader';
 
-// Public pages
+// App (non-lazy for initial load)
 import App from './App';
-import ProfilPage from './pages/ProfilPage';
-import KegiatanPage from './pages/KegiatanPage';
-import NewsDetailPage from './pages/NewsDetailPage';
-import GaleriPage from './pages/GaleriPage';
-import FAQPage from './pages/FAQPage';
-import TeamPublicPage from './pages/TeamPublicPage';
-import LayananPage from './pages/LayananPage';
-import LayananDetailPage from './pages/LayananDetailPage';
-import PPOBPage from './pages/PPOBPage';
-import EDCPage from './pages/EDCPage';
-import ArtikelPage from './pages/ArtikelPage';
-import SukuBungaPage from './pages/SukuBungaPage';
-import PengaduanPage from './pages/PengaduanPage';
-import PublikasiPage from './pages/PublikasiPage';
-import HubungiKamiPage from './pages/HubungiKamiPage';
-import TermsPage from './pages/TermsPage';
-import PrivacyPage from './pages/PrivacyPage';
 
-// Auth pages
-import LoginPage from './pages/auth/LoginPage';
-import RegisterPage from './pages/auth/RegisterPage';
+// Lazy load public pages
+const ProfilPage = lazy(() => import('./pages/ProfilPage'));
+const KegiatanPage = lazy(() => import('./pages/KegiatanPage'));
+const NewsDetailPage = lazy(() => import('./pages/NewsDetailPage'));
+const GaleriPage = lazy(() => import('./pages/GaleriPage'));
+const FAQPage = lazy(() => import('./pages/FAQPage'));
+const TeamPublicPage = lazy(() => import('./pages/TeamPublicPage'));
+const LayananPage = lazy(() => import('./pages/LayananPage'));
+const LayananDetailPage = lazy(() => import('./pages/LayananDetailPage'));
+const PPOBPage = lazy(() => import('./pages/PPOBPage'));
+const EDCPage = lazy(() => import('./pages/EDCPage'));
+const ArtikelPage = lazy(() => import('./pages/ArtikelPage'));
+const SukuBungaPage = lazy(() => import('./pages/SukuBungaPage'));
+const PengaduanPage = lazy(() => import('./pages/PengaduanPage'));
+const PublikasiPage = lazy(() => import('./pages/PublikasiPage'));
+const HubungiKamiPage = lazy(() => import('./pages/HubungiKamiPage'));
+const TermsPage = lazy(() => import('./pages/TermsPage'));
+const PrivacyPage = lazy(() => import('./pages/PrivacyPage'));
 
-// Admin pages
-import AdminLayout from './components/admin/AdminLayout';
-import Dashboard from './pages/admin/Dashboard';
-import TeamPage from './pages/admin/TeamPage';
-import ServicesPage from './pages/admin/ServicesPage';
-import NewsPage from './pages/admin/NewsPage';
-import AdminPublicationsPage from './pages/admin/PublicationsPage';
-import UsersPage from './pages/admin/UsersPage';
-import SettingsPage from './pages/admin/SettingsPage';
+// Lazy load auth pages
+const LoginPage = lazy(() => import('./pages/auth/LoginPage'));
+const RegisterPage = lazy(() => import('./pages/auth/RegisterPage'));
 
-// Protected Route
+// Lazy load admin pages
+const AdminLayout = lazy(() => import('./components/admin/AdminLayout'));
+const Dashboard = lazy(() => import('./pages/admin/Dashboard'));
+const TeamPage = lazy(() => import('./pages/admin/TeamPage'));
+const ServicesPage = lazy(() => import('./pages/admin/ServicesPage'));
+const NewsPage = lazy(() => import('./pages/admin/NewsPage'));
+const AdminPublicationsPage = lazy(() => import('./pages/admin/PublicationsPage'));
+const UsersPage = lazy(() => import('./pages/admin/UsersPage'));
+const SettingsPage = lazy(() => import('./pages/admin/SettingsPage'));
+
+// Protected Route (non-lazy, small component)
 import ProtectedRoute from './components/auth/ProtectedRoute';
+
+// Wrapper for lazy components
+const LazyWrapper = ({ children }) => (
+    <Suspense fallback={<PageLoader />}>
+        {children}
+    </Suspense>
+);
 
 const router = createBrowserRouter([
     // Public routes
@@ -45,117 +56,119 @@ const router = createBrowserRouter([
     },
     {
         path: '/profil',
-        element: <ProfilPage />,
+        element: <LazyWrapper><ProfilPage /></LazyWrapper>,
     },
     {
         path: '/kegiatan',
-        element: <KegiatanPage />,
+        element: <LazyWrapper><KegiatanPage /></LazyWrapper>,
     },
     {
         path: '/kegiatan/:id',
-        element: <NewsDetailPage />,
+        element: <LazyWrapper><NewsDetailPage /></LazyWrapper>,
     },
     {
         path: '/galeri',
-        element: <GaleriPage />,
+        element: <LazyWrapper><GaleriPage /></LazyWrapper>,
     },
     {
         path: '/faq',
-        element: <FAQPage />,
+        element: <LazyWrapper><FAQPage /></LazyWrapper>,
     },
     {
         path: '/team',
-        element: <TeamPublicPage />,
+        element: <LazyWrapper><TeamPublicPage /></LazyWrapper>,
     },
     {
         path: '/layanan/produk',
-        element: <LayananPage />,
+        element: <LazyWrapper><LayananPage /></LazyWrapper>,
     },
     {
         path: '/layanan/produk/:id',
-        element: <LayananDetailPage />,
+        element: <LazyWrapper><LayananDetailPage /></LazyWrapper>,
     },
     {
         path: '/layanan/ppob',
-        element: <PPOBPage />,
+        element: <LazyWrapper><PPOBPage /></LazyWrapper>,
     },
     {
         path: '/layanan/edc',
-        element: <EDCPage />,
+        element: <LazyWrapper><EDCPage /></LazyWrapper>,
     },
     {
         path: '/informasi/artikel',
-        element: <ArtikelPage />,
+        element: <LazyWrapper><ArtikelPage /></LazyWrapper>,
     },
     {
         path: '/informasi/suku-bunga',
-        element: <SukuBungaPage />,
+        element: <LazyWrapper><SukuBungaPage /></LazyWrapper>,
     },
     {
         path: '/informasi/pengaduan',
-        element: <PengaduanPage />,
+        element: <LazyWrapper><PengaduanPage /></LazyWrapper>,
     },
     {
         path: '/publikasi',
-        element: <PublikasiPage />,
+        element: <LazyWrapper><PublikasiPage /></LazyWrapper>,
     },
     {
         path: '/hubungi',
-        element: <HubungiKamiPage />,
+        element: <LazyWrapper><HubungiKamiPage /></LazyWrapper>,
     },
     {
         path: '/terms',
-        element: <TermsPage />,
+        element: <LazyWrapper><TermsPage /></LazyWrapper>,
     },
     {
         path: '/privacy',
-        element: <PrivacyPage />,
+        element: <LazyWrapper><PrivacyPage /></LazyWrapper>,
     },
     // Auth routes
     {
         path: '/login',
-        element: <LoginPage />,
+        element: <LazyWrapper><LoginPage /></LazyWrapper>,
     },
     {
         path: '/register',
-        element: <RegisterPage />,
+        element: <LazyWrapper><RegisterPage /></LazyWrapper>,
     },
     // Admin routes (protected)
     {
         path: '/admin',
         element: (
             <ProtectedRoute>
-                <AdminLayout />
+                <LazyWrapper>
+                    <AdminLayout />
+                </LazyWrapper>
             </ProtectedRoute>
         ),
         children: [
             {
                 index: true,
-                element: <Dashboard />,
+                element: <LazyWrapper><Dashboard /></LazyWrapper>,
             },
             {
                 path: 'team',
-                element: <TeamPage />,
+                element: <LazyWrapper><TeamPage /></LazyWrapper>,
             },
             {
                 path: 'services',
-                element: <ServicesPage />,
+                element: <LazyWrapper><ServicesPage /></LazyWrapper>,
             },
             {
                 path: 'news',
-                element: <NewsPage />,
+                element: <LazyWrapper><NewsPage /></LazyWrapper>,
             },
             {
                 path: 'publications',
-                element: <AdminPublicationsPage />,
+                element: <LazyWrapper><AdminPublicationsPage /></LazyWrapper>,
             },
             {
                 path: 'users',
-                element: <UsersPage />,
+                element: <LazyWrapper><UsersPage /></LazyWrapper>,
             },
             {
                 path: 'settings',
-                element: <SettingsPage />,
+                element: <LazyWrapper><SettingsPage /></LazyWrapper>,
             },
         ],
     },
