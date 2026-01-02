@@ -88,7 +88,7 @@ export const createNews = async (req, res) => {
                 resource: 'news',
                 resourceName: newNews.title,
                 resourceId: newNews._id,
-                userId: req.user._id,
+                userId: req.user.id,
                 userName: req.user.name || 'Admin'
             });
         }
@@ -160,7 +160,7 @@ export const updateNews = async (req, res) => {
                 resource: 'news',
                 resourceName: news.title,
                 resourceId: news._id,
-                userId: req.user._id,
+                userId: req.user.id,
                 userName: req.user.name || 'Admin'
             });
         }
@@ -215,7 +215,7 @@ export const deleteNews = async (req, res) => {
                 resource: 'news',
                 resourceName: news.title,
                 resourceId: news._id,
-                userId: req.user._id,
+                userId: req.user.id,
                 userName: req.user.name || 'Admin'
             });
         }

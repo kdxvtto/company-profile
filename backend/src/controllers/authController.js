@@ -74,7 +74,7 @@ export const login = async (req, res) => {
         message: "Invalid credentials",
       });
     }
-    const payload = { id: user._id };
+    const payload = { id: user._id, name: user.name, email: user.email };
     const token = generateAccessToken(payload);
     const refreshToken = generateRefreshToken(payload);
     user.refreshToken = refreshToken;

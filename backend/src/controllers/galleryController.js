@@ -51,7 +51,7 @@ export const createGallery = async (req, res) => {
                 resource: 'gallery',
                 resourceName: gallery.title,
                 resourceId: gallery._id,
-                userId: req.user._id,
+                userId: req.user.id,
                 userName: req.user.name || 'Admin'
             });
         }
@@ -117,7 +117,7 @@ export const updateGallery = async (req, res) => {
                 resource: 'gallery',
                 resourceName: gallery.title,
                 resourceId: gallery._id,
-                userId: req.user._id,
+                userId: req.user.id,
                 userName: req.user.name || 'Admin'
             });
         }
@@ -168,7 +168,7 @@ export const deleteGallery = async (req, res) => {
                 resource: 'gallery',
                 resourceName: gallery.title,
                 resourceId: gallery._id,
-                userId: req.user._id,
+                userId: req.user.id,
                 userName: req.user.name || 'Admin'
             });
         }

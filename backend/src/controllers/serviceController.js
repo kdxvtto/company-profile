@@ -70,7 +70,7 @@ export const createService = async (req, res) => {
                 resource: 'service',
                 resourceName: newService.title,
                 resourceId: newService._id,
-                userId: req.user._id,
+                userId: req.user.id,
                 userName: req.user.name || 'Admin'
             });
         }
@@ -140,7 +140,7 @@ export const updateService = async (req, res) => {
                 resource: 'service',
                 resourceName: service.title,
                 resourceId: service._id,
-                userId: req.user._id,
+                userId: req.user.id,
                 userName: req.user.name || 'Admin'
             });
         }
@@ -193,7 +193,7 @@ export const deleteService = async (req, res) => {
                 resource: 'service',
                 resourceName: service.title,
                 resourceId: service._id,
-                userId: req.user._id,
+                userId: req.user.id,
                 userName: req.user.name || 'Admin'
             });
         }

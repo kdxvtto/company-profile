@@ -62,7 +62,7 @@ export const createTeamProfile = async (req, res) => {
                 resource: 'team',
                 resourceName: newTeamProfile.name,
                 resourceId: newTeamProfile._id,
-                userId: req.user._id,
+                userId: req.user.id,
                 userName: req.user.name || 'Admin'
             });
         }
@@ -134,7 +134,7 @@ export const updateTeamProfile = async (req, res) => {
                 resource: 'team',
                 resourceName: teamProfile.name,
                 resourceId: teamProfile._id,
-                userId: req.user._id,
+                userId: req.user.id,
                 userName: req.user.name || 'Admin'
             });
         }
@@ -187,7 +187,7 @@ export const deleteTeamProfile = async (req, res) => {
                 resource: 'team',
                 resourceName: teamProfile.name,
                 resourceId: teamProfile._id,
-                userId: req.user._id,
+                userId: req.user.id,
                 userName: req.user.name || 'Admin'
             });
         }

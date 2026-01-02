@@ -87,7 +87,7 @@ export const createPublication = async (req, res) => {
                 resource: 'publication',
                 resourceName: publication.name,
                 resourceId: publication._id,
-                userId: req.user._id,
+                userId: req.user.id,
                 userName: req.user.name || 'Admin'
             });
         }
@@ -162,7 +162,7 @@ export const updatePublication = async (req, res) => {
                 resource: 'publication',
                 resourceName: publication.name,
                 resourceId: publication._id,
-                userId: req.user._id,
+                userId: req.user.id,
                 userName: req.user.name || 'Admin'
             });
         }
@@ -218,7 +218,7 @@ export const deletePublication = async (req, res) => {
                 resource: 'publication',
                 resourceName: publication.name,
                 resourceId: publication._id,
-                userId: req.user._id,
+                userId: req.user.id,
                 userName: req.user.name || 'Admin'
             });
         }
