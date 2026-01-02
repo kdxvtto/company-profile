@@ -2,6 +2,7 @@ import News from "../models/News.js";
 import Services from "../models/Services.js";
 import Publications from "../models/Publications.js";
 import TeamProfile from "../models/TeamProfile.js";
+import Gallery from "../models/Gallery.js";
 
 // Search across news and services
 export const search = async (req, res) => {
