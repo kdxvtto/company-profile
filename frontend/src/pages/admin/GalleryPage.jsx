@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Pencil, Trash2, Image, Upload, Loader2, X } from 'lucide-react';
+import { Plus, Pencil, Trash2, Image, Upload, Loader2, X, Search } from 'lucide-react';
 import { galleryAPI } from '@/lib/api';
 import Pagination from '@/components/admin/Pagination';
 
@@ -17,6 +17,7 @@ const GalleryPage = () => {
         image: null,
     });
     const [preview, setPreview] = useState(null);
+    const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
         fetchGallery(currentPage);
@@ -131,6 +132,18 @@ const GalleryPage = () => {
                 </button>
             </div>
 
+            {/* Search Bar */}
+            <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Cari galeri..."
+                    className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-rose-500"
+                />
+            </div>
+
             {/* Content */}
             <div className="bg-white rounded-xl shadow-lg p-6">
                 {loading ? (
@@ -143,8 +156,19 @@ const GalleryPage = () => {
                         <p>Belum ada galeri</p>
                     </div>
                 ) : (
+                    (() => {
+                        const filteredGallery = gallery.filter(item => 
+                            item.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                            item.content?.toLowerCase().includes(searchQuery.toLowerCase())
+                        );
+                        return filteredGallery.length === 0 ? (
+                            <div className="text-center py-12 text-gray-500">
+                                <Search className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                                <p>Tidak ada hasil untuk "{searchQuery}"</p>
+                            </div>
+                        ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                        {gallery.map((item) => (
+                        {filteredGallery.map((item) => (
                             <div key={item._id} className="bg-white rounded-xl overflow-hidden shadow-md border border-gray-100">
                                 {/* Image - taller aspect ratio */}
                                 <div className="aspect-[4/3] bg-gray-100">
@@ -187,6 +211,8 @@ const GalleryPage = () => {
                             </div>
                         ))}
                     </div>
+                        );
+                    })()
                 )}
             </div>
 
