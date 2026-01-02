@@ -79,7 +79,7 @@ export const uploadPublication = multer({
 
 export const uploadGallery = multer({ 
     storage: galleryStorage,
-    limits: { fileSize: 5 * 1024 * 1024 } // 5MB max for images
+    limits: { fileSize: 10 * 1024 * 1024 } // 10MB max for images
 });
 
 // Helper to delete file from Cloudinary
