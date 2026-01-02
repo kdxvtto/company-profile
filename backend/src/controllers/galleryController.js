@@ -2,6 +2,7 @@ import Gallery from "../models/Gallery.js";
 import { getPublicIdFromUrl } from "../config/cloudinary.js";
 import { deleteFromCloudinary } from "../config/cloudinary.js";
 import mongoose from "mongoose";
+import { createActivityLog } from "./activityLogController.js";
 
 export const getGallery = async (req, res) => {
     try {
@@ -42,6 +43,19 @@ export const createGallery = async (req, res) => {
         }
         const gallery = new Gallery({ title, content, image : [image] });
         await gallery.save();
+        
+        // Log activity
+        if (req.user) {
+            await createActivityLog({
+                action: 'create',
+                resource: 'gallery',
+                resourceName: gallery.title,
+                resourceId: gallery._id,
+                userId: req.user._id,
+                userName: req.user.name || 'Admin'
+            });
+        }
+        
         return res.status(201).json({
             success : true,
             data : gallery
@@ -95,6 +109,19 @@ export const updateGallery = async (req, res) => {
                 await deleteFromCloudinary(publicId);
             }
         }
+        
+        // Log activity
+        if (req.user) {
+            await createActivityLog({
+                action: 'update',
+                resource: 'gallery',
+                resourceName: gallery.title,
+                resourceId: gallery._id,
+                userId: req.user._id,
+                userName: req.user.name || 'Admin'
+            });
+        }
+        
         return res.status(200).json({
             success : true,
             data : gallery
@@ -133,6 +160,19 @@ export const deleteGallery = async (req, res) => {
                 await deleteFromCloudinary(publicId);
             }
         }
+        
+        // Log activity
+        if (req.user) {
+            await createActivityLog({
+                action: 'delete',
+                resource: 'gallery',
+                resourceName: gallery.title,
+                resourceId: gallery._id,
+                userId: req.user._id,
+                userName: req.user.name || 'Admin'
+            });
+        }
+        
         return res.status(200).json({
             success : true,
             data : gallery

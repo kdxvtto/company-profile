@@ -1,6 +1,7 @@
 import Publications from "../models/Publications.js";
 import { deleteFromCloudinary, getPublicIdFromUrl } from "../config/cloudinary.js";
 import mongoose from "mongoose";
+import { createActivityLog } from "./activityLogController.js";
 
 // Get all publications
 export const getAllPublications = async (req, res) => {
@@ -79,6 +80,18 @@ export const createPublication = async (req, res) => {
         });
         await publication.save();
 
+        // Log activity
+        if (req.user) {
+            await createActivityLog({
+                action: 'create',
+                resource: 'publication',
+                resourceName: publication.name,
+                resourceId: publication._id,
+                userId: req.user._id,
+                userName: req.user.name || 'Admin'
+            });
+        }
+
         res.status(201).json({
             success: true,
             data: publication
@@ -142,6 +155,18 @@ export const updatePublication = async (req, res) => {
             }
         }
 
+        // Log activity
+        if (req.user) {
+            await createActivityLog({
+                action: 'update',
+                resource: 'publication',
+                resourceName: publication.name,
+                resourceId: publication._id,
+                userId: req.user._id,
+                userName: req.user.name || 'Admin'
+            });
+        }
+
         res.status(200).json({
             success: true,
             data: publication
@@ -184,6 +209,18 @@ export const deletePublication = async (req, res) => {
                 const publicId = getPublicIdFromUrl(f);
                 await deleteFromCloudinary(publicId, 'raw');
             }
+        }
+
+        // Log activity
+        if (req.user) {
+            await createActivityLog({
+                action: 'delete',
+                resource: 'publication',
+                resourceName: publication.name,
+                resourceId: publication._id,
+                userId: req.user._id,
+                userName: req.user.name || 'Admin'
+            });
         }
 
         res.status(200).json({

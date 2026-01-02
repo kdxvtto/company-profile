@@ -1,6 +1,7 @@
 import TeamProfile from "../models/TeamProfile.js";
 import { deleteFromCloudinary, getPublicIdFromUrl } from "../config/cloudinary.js";
 import mongoose from "mongoose";
+import { createActivityLog } from "./activityLogController.js";
 
 // Get all team profiles
 export const getAllTeamProfiles = async (req, res) => {
@@ -53,6 +54,19 @@ export const createTeamProfile = async (req, res) => {
         }
         const teamProfile = new TeamProfile({ name, position, image, facebook, instagram });
         const newTeamProfile = await teamProfile.save();
+        
+        // Log activity
+        if (req.user) {
+            await createActivityLog({
+                action: 'create',
+                resource: 'team',
+                resourceName: newTeamProfile.name,
+                resourceId: newTeamProfile._id,
+                userId: req.user._id,
+                userName: req.user.name || 'Admin'
+            });
+        }
+        
         res.status(201).json({
             success: true,
             data: newTeamProfile
@@ -113,6 +127,18 @@ export const updateTeamProfile = async (req, res) => {
             await deleteFromCloudinary(publicId);
         }
 
+        // Log activity
+        if (req.user) {
+            await createActivityLog({
+                action: 'update',
+                resource: 'team',
+                resourceName: teamProfile.name,
+                resourceId: teamProfile._id,
+                userId: req.user._id,
+                userName: req.user.name || 'Admin'
+            });
+        }
+
         res.status(200).json({
             success: true,
             data: teamProfile
@@ -152,6 +178,18 @@ export const deleteTeamProfile = async (req, res) => {
         if (teamProfile.image) {
             const publicId = getPublicIdFromUrl(teamProfile.image);
             await deleteFromCloudinary(publicId);
+        }
+        
+        // Log activity
+        if (req.user) {
+            await createActivityLog({
+                action: 'delete',
+                resource: 'team',
+                resourceName: teamProfile.name,
+                resourceId: teamProfile._id,
+                userId: req.user._id,
+                userName: req.user.name || 'Admin'
+            });
         }
         
         res.status(200).json({

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Users, Briefcase, Newspaper, UserCog, TrendingUp, ArrowUpRight, Loader2 } from 'lucide-react';
+import { Users, Briefcase, Newspaper, UserCog, TrendingUp, ArrowUpRight, Loader2, Plus, Pencil, Trash2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { teamAPI, servicesAPI, newsAPI, usersAPI } from '@/lib/api';
+import { teamAPI, servicesAPI, newsAPI, usersAPI, activityAPI } from '@/lib/api';
 
 const Dashboard = () => {
     const [loading, setLoading] = useState(true);
@@ -11,25 +11,28 @@ const Dashboard = () => {
         news: 0,
         users: 0,
     });
+    const [activities, setActivities] = useState([]);
 
-    // Fetch all stats from database
+    // Fetch all stats and activities from database
     useEffect(() => {
         const fetchStats = async () => {
             try {
                 setLoading(true);
-                const [teamRes, servicesRes, newsRes, usersRes] = await Promise.all([
+                const [teamRes, servicesRes, newsRes, usersRes, activityRes] = await Promise.all([
                     teamAPI.getAll(),
                     servicesAPI.getAll(),
                     newsAPI.getAll(),
                     usersAPI.getAll(),
+                    activityAPI.getAll({ limit: 5 }).catch(() => ({ data: { data: [] } })),
                 ]);
 
                 setStats({
-                    team: teamRes.data.data?.length || 0,
+                    team: teamRes.data.data?.length || teamRes.data.pagination?.totalItems || 0,
                     services: servicesRes.data.data?.length || 0,
-                    news: newsRes.data.data?.length || 0,
+                    news: newsRes.data.data?.length || newsRes.data.pagination?.totalNews || 0,
                     users: usersRes.data.data?.length || 0,
                 });
+                setActivities(activityRes.data.data || []);
             } catch (error) {
                 console.error('Error fetching stats:', error);
             } finally {
@@ -67,12 +70,51 @@ const Dashboard = () => {
         },
     ];
 
-    const recentActivities = [
-        { action: 'Added new team member', user: 'Admin', time: '2 hours ago' },
-        { action: 'Updated service "Kredit Umum"', user: 'Admin', time: '3 hours ago' },
-        { action: 'Published new article', user: 'Admin', time: '5 hours ago' },
-        { action: 'Deleted old news', user: 'Admin', time: '1 day ago' },
-    ];
+    // Helper to format time ago
+    const formatTimeAgo = (dateString) => {
+        const now = new Date();
+        const date = new Date(dateString);
+        const diff = Math.floor((now - date) / 1000);
+        
+        if (diff < 60) return 'Baru saja';
+        if (diff < 3600) return `${Math.floor(diff / 60)} menit yang lalu`;
+        if (diff < 86400) return `${Math.floor(diff / 3600)} jam yang lalu`;
+        if (diff < 604800) return `${Math.floor(diff / 86400)} hari yang lalu`;
+        return date.toLocaleDateString('id-ID');
+    };
+
+    // Helper to get action icon and color
+    const getActionStyle = (action) => {
+        switch(action) {
+            case 'create': return { icon: Plus, color: 'text-green-600 bg-green-50' };
+            case 'update': return { icon: Pencil, color: 'text-blue-600 bg-blue-50' };
+            case 'delete': return { icon: Trash2, color: 'text-red-600 bg-red-50' };
+            default: return { icon: TrendingUp, color: 'text-gray-600 bg-gray-50' };
+        }
+    };
+
+    // Helper to translate resource name
+    const translateResource = (resource) => {
+        const map = {
+            'news': 'Berita',
+            'team': 'Tim',
+            'service': 'Layanan',
+            'publication': 'Publikasi',
+            'gallery': 'Galeri',
+            'user': 'User'
+        };
+        return map[resource] || resource;
+    };
+
+    // Helper to translate action
+    const translateAction = (action) => {
+        const map = {
+            'create': 'Menambahkan',
+            'update': 'Mengubah',
+            'delete': 'Menghapus'
+        };
+        return map[action] || action;
+    };
 
     return (
         <div className="space-y-6">
@@ -117,20 +159,38 @@ const Dashboard = () => {
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2">
                             <TrendingUp className="w-5 h-5" />
-                            Recent Activities
+                            Aktivitas Terbaru
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <div className="space-y-4">
-                            {recentActivities.map((activity, index) => (
-                                <div key={index} className="flex items-center justify-between py-3 border-b border-gray-100 last:border-0">
-                                    <div>
-                                        <p className="font-medium text-gray-900">{activity.action}</p>
-                                        <p className="text-sm text-gray-500">by {activity.user}</p>
-                                    </div>
-                                    <span className="text-sm text-gray-400">{activity.time}</span>
+                        <div className="space-y-3">
+                            {activities.length === 0 ? (
+                                <div className="text-center py-8 text-gray-500">
+                                    <TrendingUp className="w-10 h-10 mx-auto mb-2 opacity-50" />
+                                    <p className="text-sm">Belum ada aktivitas</p>
                                 </div>
-                            ))}
+                            ) : (
+                                activities.map((activity, index) => {
+                                    const { icon: ActionIcon, color } = getActionStyle(activity.action);
+                                    return (
+                                        <div key={index} className="flex items-start gap-3 py-3 border-b border-gray-100 last:border-0">
+                                            <div className={`p-2 rounded-lg ${color}`}>
+                                                <ActionIcon className="w-4 h-4" />
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <p className="font-medium text-gray-900 text-sm">
+                                                    {translateAction(activity.action)} {translateResource(activity.resource)}
+                                                </p>
+                                                <p className="text-xs text-gray-600 truncate">"{activity.resourceName}"</p>
+                                                <p className="text-xs text-gray-400 mt-1">oleh {activity.userName}</p>
+                                            </div>
+                                            <span className="text-xs text-gray-400 whitespace-nowrap">
+                                                {formatTimeAgo(activity.createdAt)}
+                                            </span>
+                                        </div>
+                                    );
+                                })
+                            )}
                         </div>
                     </CardContent>
                 </Card>

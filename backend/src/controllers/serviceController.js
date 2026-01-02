@@ -1,6 +1,7 @@
 import Services from "../models/Services.js";
 import { deleteFromCloudinary, getPublicIdFromUrl } from "../config/cloudinary.js";
 import mongoose from "mongoose";
+import { createActivityLog } from "./activityLogController.js";
 
 // Get all services
 export const getAllServices = async (req, res) => {
@@ -61,6 +62,19 @@ export const createService = async (req, res) => {
         }
         const service = new Services({ title, content, image, category });
         const newService = await service.save();
+        
+        // Log activity
+        if (req.user) {
+            await createActivityLog({
+                action: 'create',
+                resource: 'service',
+                resourceName: newService.title,
+                resourceId: newService._id,
+                userId: req.user._id,
+                userName: req.user.name || 'Admin'
+            });
+        }
+        
         res.status(201).json({
             success: true,
             data: newService
@@ -119,6 +133,18 @@ export const updateService = async (req, res) => {
             await deleteFromCloudinary(publicId);
         }
 
+        // Log activity
+        if (req.user) {
+            await createActivityLog({
+                action: 'update',
+                resource: 'service',
+                resourceName: service.title,
+                resourceId: service._id,
+                userId: req.user._id,
+                userName: req.user.name || 'Admin'
+            });
+        }
+
         res.status(200).json({
             success: true,
             data: service
@@ -158,6 +184,18 @@ export const deleteService = async (req, res) => {
         if (service.image) {
             const publicId = getPublicIdFromUrl(service.image);
             await deleteFromCloudinary(publicId);
+        }
+        
+        // Log activity
+        if (req.user) {
+            await createActivityLog({
+                action: 'delete',
+                resource: 'service',
+                resourceName: service.title,
+                resourceId: service._id,
+                userId: req.user._id,
+                userName: req.user.name || 'Admin'
+            });
         }
         
         res.status(200).json({

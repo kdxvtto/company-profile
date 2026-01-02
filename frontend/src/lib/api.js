@@ -216,4 +216,11 @@ export const galleryAPI = {
     delete: (id) => api.delete(`/gallery/${id}`),
 };
 
+// ========================
+// Activity Log API
+// ========================
+export const activityAPI = {
+    getAll: (params = {}) => api.get('/activity', { params }),
+};
+
 export default api;

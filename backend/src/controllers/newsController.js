@@ -1,6 +1,7 @@
 import News from "../models/News.js";
 import { deleteFromCloudinary, getPublicIdFromUrl } from "../config/cloudinary.js";
 import mongoose from "mongoose";
+import { createActivityLog } from "./activityLogController.js";
 
 // Get all news
 export const getAllNews = async (req, res) => {
@@ -79,6 +80,19 @@ export const createNews = async (req, res) => {
             category
         });
         const newNews = await news.save();
+        
+        // Log activity
+        if (req.user) {
+            await createActivityLog({
+                action: 'create',
+                resource: 'news',
+                resourceName: newNews.title,
+                resourceId: newNews._id,
+                userId: req.user._id,
+                userName: req.user.name || 'Admin'
+            });
+        }
+        
         res.status(201).json({
             success: true,
             data: newNews
@@ -139,6 +153,18 @@ export const updateNews = async (req, res) => {
             }
         }
 
+        // Log activity
+        if (req.user) {
+            await createActivityLog({
+                action: 'update',
+                resource: 'news',
+                resourceName: news.title,
+                resourceId: news._id,
+                userId: req.user._id,
+                userName: req.user.name || 'Admin'
+            });
+        }
+
         res.status(200).json({
             success: true,
             data: news
@@ -180,6 +206,18 @@ export const deleteNews = async (req, res) => {
                 const publicId = getPublicIdFromUrl(img);
                 await deleteFromCloudinary(publicId);
             }
+        }
+        
+        // Log activity
+        if (req.user) {
+            await createActivityLog({
+                action: 'delete',
+                resource: 'news',
+                resourceName: news.title,
+                resourceId: news._id,
+                userId: req.user._id,
+                userName: req.user.name || 'Admin'
+            });
         }
         
         res.status(200).json({
