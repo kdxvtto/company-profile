@@ -35,6 +35,7 @@ const TeamPage = lazy(() => import('./pages/admin/TeamPage'));
 const ServicesPage = lazy(() => import('./pages/admin/ServicesPage'));
 const NewsPage = lazy(() => import('./pages/admin/NewsPage'));
 const AdminPublicationsPage = lazy(() => import('./pages/admin/PublicationsPage'));
+const AdminGalleryPage = lazy(() => import('./pages/admin/GalleryPage'));
 const UsersPage = lazy(() => import('./pages/admin/UsersPage'));
 const SettingsPage = lazy(() => import('./pages/admin/SettingsPage'));
 
@@ -161,6 +162,10 @@ const router = createBrowserRouter([
             {
                 path: 'publications',
                 element: <LazyWrapper><AdminPublicationsPage /></LazyWrapper>,
+            },
+            {
+                path: 'gallery',
+                element: <LazyWrapper><AdminGalleryPage /></LazyWrapper>,
             },
             {
                 path: 'users',

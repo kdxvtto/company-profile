@@ -5,10 +5,21 @@ import mongoose from "mongoose";
 // Get all team profiles
 export const getAllTeamProfiles = async (req, res) => {
     try {
-        const teamProfiles = await TeamProfile.find();
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const skip = (page - 1) * limit;
+        const teamProfiles = await TeamProfile.find().sort({ createdAt: -1 }).skip(skip).limit(limit);
+        const totalTeamProfiles = await TeamProfile.countDocuments();
+        const totalPages = Math.ceil(totalTeamProfiles / limit);
         res.status(200).json({
             success: true,
-            data: teamProfiles
+            data: teamProfiles,
+            pagination: {
+                totalTeamProfiles,
+                totalPages,
+                currentPage: page,
+                limit
+            }
         });
     } catch (error) {
         res.status(500).json({

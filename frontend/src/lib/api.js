@@ -201,4 +201,19 @@ export const publicationsAPI = {
     delete: (id) => api.delete(`/publications/${id}`),
 };
 
+// ========================
+// Gallery API
+// ========================
+export const galleryAPI = {
+    getAll: (params = {}) => api.get('/gallery', { params }),
+    getById: (id) => api.get(`/gallery/${id}`),
+    create: (formData) => api.post('/gallery', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    }),
+    update: (id, formData) => api.put(`/gallery/${id}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    }),
+    delete: (id) => api.delete(`/gallery/${id}`),
+};
+
 export default api;

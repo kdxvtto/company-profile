@@ -49,6 +49,16 @@ const publicationStorage = new CloudinaryStorage({
     },
 });
 
+// Storage for gallery images
+const galleryStorage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'bankwonogiri/gallery',
+        allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
+        transformation: [{ width: 800, height: 600, crop: 'limit' }],
+    },
+});
+
 // Create multer instances with file size limits
 export const uploadTeam = multer({ 
     storage: teamStorage,
@@ -65,6 +75,11 @@ export const uploadService = multer({
 export const uploadPublication = multer({ 
     storage: publicationStorage,
     limits: { fileSize: 10 * 1024 * 1024 } // 10MB max for PDFs
+});
+
+export const uploadGallery = multer({ 
+    storage: galleryStorage,
+    limits: { fileSize: 5 * 1024 * 1024 } // 5MB max for images
 });
 
 // Helper to delete file from Cloudinary

@@ -6,6 +6,7 @@ import {
     Newspaper, 
     UserCog,
     FileText,
+    Image,
     Settings,
     LogOut,
     X
@@ -41,6 +42,11 @@ const Sidebar = ({ isOpen, onClose }) => {
             title: 'Publications',
             icon: FileText,
             path: '/admin/publications',
+        },
+        {
+            title: 'Gallery',
+            icon: Image,
+            path: '/admin/gallery',
         },
         {
             title: 'Users',

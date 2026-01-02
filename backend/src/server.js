@@ -23,6 +23,7 @@ import teamProfileRoutes from "./routes/teamProfileRouter.js";
 import authRoutes from "./routes/authRouter.js";
 import searchRoutes from "./routes/searchRouter.js";
 import publicationRoutes from "./routes/publicationRouter.js";
+import galleryRoutes from "./routes/galleryRouter.js";  
 import { errorHandler, notFoundHandler } from "./middlewares/errorHandler.js";
 
 const app = express();
@@ -60,6 +61,7 @@ app.use("/api/team-profiles", teamProfileRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/search", searchRoutes);
 app.use("/api/publications", publicationRoutes);
+app.use("/api/gallery", galleryRoutes);
 // Health check endpoint for Railway/Render
 app.get("/health", (req, res) => {
     res.status(200).json({ status: "ok", timestamp: new Date().toISOString() });
