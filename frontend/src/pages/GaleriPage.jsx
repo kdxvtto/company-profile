@@ -108,6 +108,8 @@ const GaleriPage = () => {
                                             <img
                                                 src={item.image[0]}
                                                 alt={item.title}
+                                                loading="lazy"
+                                                decoding="async"
                                                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                                             />
                                         ) : (

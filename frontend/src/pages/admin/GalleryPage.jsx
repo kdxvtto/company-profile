@@ -240,7 +240,7 @@ const GalleryPage = () => {
                             {/* Image Preview */}
                             <div className="aspect-video bg-gray-100 rounded-xl overflow-hidden relative">
                                 {preview ? (
-                                    <img src={preview} alt="Preview" className="w-full h-full object-cover" />
+                                    <img loading="lazy" decoding="async" src={preview} alt="Preview" className="w-full h-full object-cover" />
                                 ) : (
                                     <div className="w-full h-full flex flex-col items-center justify-center text-gray-400">
                                         <Image className="w-12 h-12 mb-2" />
