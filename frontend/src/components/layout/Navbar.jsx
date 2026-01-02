@@ -116,6 +116,8 @@ const Navbar = () => {
             navigate(`/publikasi`);
         } else if (type === "teamProfiles") {
             navigate(`/team`);
+        } else if (type === "gallery") {
+            navigate(`/galeri`);
         }
         setSearchOpen(false);
         setSearchQuery("");
@@ -314,6 +316,21 @@ const Navbar = () => {
                                                                 >
                                                                     <p className="text-sm font-medium text-gray-900 truncate">{item.name}</p>
                                                                     <p className="text-xs text-gray-500">{item.position}</p>
+                                                                </button>
+                                                            ))}
+                                                        </div>
+                                                    )}
+                                                    {searchResults.gallery && searchResults.gallery.length > 0 && (
+                                                        <div className="mt-4">
+                                                            <h4 className="text-sm font-medium text-gray-900 mb-2">Galeri</h4>
+                                                            {searchResults.gallery.map((item) => (
+                                                                <button
+                                                                    key={item._id}
+                                                                    onClick={() => handleResultClick("gallery", item._id)}
+                                                                    className="w-full text-left px-3 py-2 hover:bg-gray-50 rounded-md"
+                                                                >
+                                                                    <p className="text-sm font-medium text-gray-900 truncate">{item.title}</p>
+                                                                    <p className="text-xs text-gray-500">{item.description}</p>
                                                                 </button>
                                                             ))}
                                                         </div>
