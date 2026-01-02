@@ -27,6 +27,9 @@ import { errorHandler, notFoundHandler } from "./middlewares/errorHandler.js";
 
 const app = express();
 
+// Trust proxy for Railway/Vercel/Render (behind reverse proxy)
+app.set('trust proxy', 1);
+
 // Compression middleware for Gzip responses
 app.use(compression());
 
