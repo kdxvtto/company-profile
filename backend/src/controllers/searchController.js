@@ -49,6 +49,14 @@ export const search = async (req, res) => {
             ]
         }).limit(5).select('_id name position image');
 
+        // Search in Gallery
+        const galleryResults = await Gallery.find({
+            $or: [
+                { title: searchRegex },
+                { description: searchRegex }
+            ]
+        }).limit(5).select('_id title description image');
+
         res.status(200).json({
             success: true,
             data: {
@@ -56,7 +64,8 @@ export const search = async (req, res) => {
                 services: servicesResults,
                 publications: publicationsResults,
                 teamProfiles: teamProfilesResults,
-                totalResults: newsResults.length + servicesResults.length + publicationsResults.length + teamProfilesResults.length
+                gallery: galleryResults, 
+                totalResults: newsResults.length + servicesResults.length + publicationsResults.length + teamProfilesResults.length + galleryResults.length
             }
         });
     } catch (error) {

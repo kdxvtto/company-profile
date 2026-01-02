@@ -143,44 +143,44 @@ const GalleryPage = () => {
                         <p>Belum ada galeri</p>
                     </div>
                 ) : (
-                    <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                         {gallery.map((item) => (
-                            <div key={item._id} className="group relative bg-gray-100 rounded-xl overflow-hidden">
-                                {/* Image */}
-                                <div className="aspect-square">
+                            <div key={item._id} className="bg-white rounded-xl overflow-hidden shadow-md border border-gray-100">
+                                {/* Image - taller aspect ratio */}
+                                <div className="aspect-[4/3] bg-gray-100">
                                     {item.image?.[0] ? (
                                         <img
                                             src={item.image[0]}
                                             alt={item.title}
-                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                            className="w-full h-full object-cover"
                                         />
                                     ) : (
                                         <div className="w-full h-full flex items-center justify-center bg-gray-200">
-                                            <Image className="w-8 h-8 sm:w-12 sm:h-12 text-gray-400" />
+                                            <Image className="w-12 h-12 text-gray-400" />
                                         </div>
                                     )}
                                 </div>
                                 
-                                {/* Info & Actions - Always visible on mobile */}
-                                <div className="p-2 sm:p-3 bg-white border-t">
-                                    <h3 className="font-semibold text-gray-900 text-sm sm:text-base truncate">{item.title}</h3>
-                                    <p className="text-gray-500 text-xs sm:text-sm line-clamp-1 mt-0.5">{item.content}</p>
+                                {/* Info */}
+                                <div className="p-4">
+                                    <h3 className="font-semibold text-gray-900 truncate">{item.title}</h3>
+                                    <p className="text-gray-500 text-sm line-clamp-2 mt-1">{item.content}</p>
                                     
-                                    {/* Action Buttons */}
-                                    <div className="flex gap-2 mt-2">
+                                    {/* Action Buttons - Vertical on mobile, horizontal on desktop */}
+                                    <div className="flex flex-col sm:flex-row gap-2 mt-3">
                                         <button
                                             onClick={() => handleEdit(item)}
-                                            className="flex-1 flex items-center justify-center gap-1 px-2 py-1.5 sm:py-2 bg-blue-50 text-blue-600 rounded-lg text-xs sm:text-sm font-medium hover:bg-blue-100 transition-colors"
+                                            className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-blue-50 text-blue-600 rounded-lg text-sm font-medium hover:bg-blue-100 transition-colors"
                                         >
-                                            <Pencil className="w-3 h-3 sm:w-4 sm:h-4" />
-                                            <span className="hidden sm:inline">Edit</span>
+                                            <Pencil className="w-4 h-4" />
+                                            Edit
                                         </button>
                                         <button
                                             onClick={() => handleDelete(item._id)}
-                                            className="flex-1 flex items-center justify-center gap-1 px-2 py-1.5 sm:py-2 bg-red-50 text-red-600 rounded-lg text-xs sm:text-sm font-medium hover:bg-red-100 transition-colors"
+                                            className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-red-50 text-red-600 rounded-lg text-sm font-medium hover:bg-red-100 transition-colors"
                                         >
-                                            <Trash2 className="w-3 h-3 sm:w-4 sm:h-4" />
-                                            <span className="hidden sm:inline">Hapus</span>
+                                            <Trash2 className="w-4 h-4" />
+                                            Hapus
                                         </button>
                                     </div>
                                 </div>
