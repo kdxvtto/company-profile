@@ -143,41 +143,44 @@ const GalleryPage = () => {
                         <p>Belum ada galeri</p>
                     </div>
                 ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
                         {gallery.map((item) => (
-                            <div key={item._id} className="group relative bg-gray-100 rounded-xl overflow-hidden aspect-square">
-                                {item.image?.[0] ? (
-                                    <img
-                                        src={item.image[0]}
-                                        alt={item.title}
-                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                    />
-                                ) : (
-                                    <div className="w-full h-full flex items-center justify-center bg-gray-200">
-                                        <Image className="w-12 h-12 text-gray-400" />
-                                    </div>
-                                )}
+                            <div key={item._id} className="group relative bg-gray-100 rounded-xl overflow-hidden">
+                                {/* Image */}
+                                <div className="aspect-square">
+                                    {item.image?.[0] ? (
+                                        <img
+                                            src={item.image[0]}
+                                            alt={item.title}
+                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                        />
+                                    ) : (
+                                        <div className="w-full h-full flex items-center justify-center bg-gray-200">
+                                            <Image className="w-8 h-8 sm:w-12 sm:h-12 text-gray-400" />
+                                        </div>
+                                    )}
+                                </div>
                                 
-                                {/* Overlay */}
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                    <div className="absolute bottom-0 left-0 right-0 p-4">
-                                        <h3 className="text-white font-semibold truncate">{item.title}</h3>
-                                        <p className="text-white/80 text-sm line-clamp-2">{item.content}</p>
-                                    </div>
+                                {/* Info & Actions - Always visible on mobile */}
+                                <div className="p-2 sm:p-3 bg-white border-t">
+                                    <h3 className="font-semibold text-gray-900 text-sm sm:text-base truncate">{item.title}</h3>
+                                    <p className="text-gray-500 text-xs sm:text-sm line-clamp-1 mt-0.5">{item.content}</p>
                                     
                                     {/* Action Buttons */}
-                                    <div className="absolute top-3 right-3 flex gap-2">
+                                    <div className="flex gap-2 mt-2">
                                         <button
                                             onClick={() => handleEdit(item)}
-                                            className="p-2 bg-white/90 rounded-lg text-blue-600 hover:bg-white transition-colors"
+                                            className="flex-1 flex items-center justify-center gap-1 px-2 py-1.5 sm:py-2 bg-blue-50 text-blue-600 rounded-lg text-xs sm:text-sm font-medium hover:bg-blue-100 transition-colors"
                                         >
-                                            <Pencil className="w-4 h-4" />
+                                            <Pencil className="w-3 h-3 sm:w-4 sm:h-4" />
+                                            <span className="hidden sm:inline">Edit</span>
                                         </button>
                                         <button
                                             onClick={() => handleDelete(item._id)}
-                                            className="p-2 bg-white/90 rounded-lg text-red-600 hover:bg-white transition-colors"
+                                            className="flex-1 flex items-center justify-center gap-1 px-2 py-1.5 sm:py-2 bg-red-50 text-red-600 rounded-lg text-xs sm:text-sm font-medium hover:bg-red-100 transition-colors"
                                         >
-                                            <Trash2 className="w-4 h-4" />
+                                            <Trash2 className="w-3 h-3 sm:w-4 sm:h-4" />
+                                            <span className="hidden sm:inline">Hapus</span>
                                         </button>
                                     </div>
                                 </div>
