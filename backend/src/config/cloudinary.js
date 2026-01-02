@@ -67,11 +67,12 @@ export const uploadPublication = multer({
     limits: { fileSize: 10 * 1024 * 1024 } // 10MB max for PDFs
 });
 
-// Helper to delete image from Cloudinary
-export const deleteFromCloudinary = async (publicId) => {
+// Helper to delete file from Cloudinary
+// resourceType: 'image' for images, 'raw' for PDFs
+export const deleteFromCloudinary = async (publicId, resourceType = 'image') => {
     try {
         if (publicId) {
-            await cloudinary.uploader.destroy(publicId);
+            await cloudinary.uploader.destroy(publicId, { resource_type: resourceType });
         }
     } catch (error) {
         console.error('Error deleting from Cloudinary:', error);
@@ -81,8 +82,10 @@ export const deleteFromCloudinary = async (publicId) => {
 // Extract public ID from Cloudinary URL
 export const getPublicIdFromUrl = (url) => {
     if (!url) return null;
-    // URL format: https://res.cloudinary.com/cloud_name/image/upload/v123/folder/filename.ext
-    const matches = url.match(/\/v\d+\/(.+)\.\w+$/);
+    // URL formats:
+    // Image: https://res.cloudinary.com/cloud_name/image/upload/v123/folder/filename.ext
+    // Raw: https://res.cloudinary.com/cloud_name/raw/upload/v123/folder/filename.pdf
+    const matches = url.match(/\/v\d+\/(.+)$/);
     return matches ? matches[1] : null;
 };
 

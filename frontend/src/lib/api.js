@@ -127,7 +127,7 @@ export const authAPI = {
 // Team Profile API
 // ========================
 export const teamAPI = {
-    getAll: () => api.get('/team-profiles'),
+    getAll: (params = {}) => api.get('/team-profiles', { params }),
     getById: (id) => api.get(`/team-profiles/${id}`),
     create: (data) => api.post('/team-profiles', data, {
         headers: { 'Content-Type': 'multipart/form-data' },
@@ -157,7 +157,7 @@ export const servicesAPI = {
 // News API
 // ========================
 export const newsAPI = {
-    getAll: () => api.get('/news'),
+    getAll: (params = {}) => api.get('/news', { params }),
     getById: (id) => api.get(`/news/${id}`),
     create: (data) => api.post('/news', data, {
         headers: { 'Content-Type': 'multipart/form-data' },
@@ -190,7 +190,7 @@ export const searchAPI = {
 // Publications API
 // ========================
 export const publicationsAPI = {
-    getAll: () => api.get('/publications'),
+    getAll: (params = {}) => api.get('/publications', { params }),
     getById: (id) => api.get(`/publications/${id}`),
     create: (formData) => api.post('/publications', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }

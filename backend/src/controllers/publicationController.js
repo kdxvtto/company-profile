@@ -87,7 +87,7 @@ export const createPublication = async (req, res) => {
         // Delete uploaded file from Cloudinary on error
         if (file) {
             const publicId = getPublicIdFromUrl(file);
-            await deleteFromCloudinary(publicId);
+            await deleteFromCloudinary(publicId, 'raw');  // 'raw' for PDF files
         }
         res.status(500).json({
             success: false,
@@ -105,7 +105,7 @@ export const updatePublication = async (req, res) => {
         if (!mongoose.Types.ObjectId.isValid(id)) {
             if (newFile) {
                 const publicId = getPublicIdFromUrl(newFile);
-                await deleteFromCloudinary(publicId);
+                await deleteFromCloudinary(publicId, 'raw');
             }
             return res.status(404).json({
                 success: false,
@@ -117,7 +117,7 @@ export const updatePublication = async (req, res) => {
         if (!publication) {
             if (newFile) {
                 const publicId = getPublicIdFromUrl(newFile);
-                await deleteFromCloudinary(publicId);
+                await deleteFromCloudinary(publicId, 'raw');
             }
             return res.status(404).json({
                 success: false,
@@ -138,7 +138,7 @@ export const updatePublication = async (req, res) => {
         if (newFile && oldFiles && oldFiles.length > 0) {
             for (const f of oldFiles) {
                 const publicId = getPublicIdFromUrl(f);
-                await deleteFromCloudinary(publicId);
+                await deleteFromCloudinary(publicId, 'raw');
             }
         }
 
@@ -150,7 +150,7 @@ export const updatePublication = async (req, res) => {
         // Delete new file on error
         if (newFile) {
             const publicId = getPublicIdFromUrl(newFile);
-            await deleteFromCloudinary(publicId);
+            await deleteFromCloudinary(publicId, 'raw');
         }
         res.status(500).json({
             success: false,
@@ -182,7 +182,7 @@ export const deletePublication = async (req, res) => {
         if (publication.file && publication.file.length > 0) {
             for (const f of publication.file) {
                 const publicId = getPublicIdFromUrl(f);
-                await deleteFromCloudinary(publicId);
+                await deleteFromCloudinary(publicId, 'raw');
             }
         }
 

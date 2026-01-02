@@ -12,6 +12,7 @@ import {
     DialogFooter,
 } from '@/components/ui/dialog';
 import { teamAPI } from '@/lib/api';
+import Pagination from '@/components/admin/Pagination';
 
 // Base URL untuk gambar dari backend
 const API_BASE_URL = 'http://localhost:3000';
@@ -39,29 +40,33 @@ const TeamPage = () => {
         image: null,
     });
     const [submitting, setSubmitting] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
 
     // Fetch team data
-    const fetchTeam = async () => {
+    const fetchTeam = async (page = 1) => {
         try {
             setLoading(true);
-            const response = await teamAPI.getAll();
+            const response = await teamAPI.getAll({ page, limit: 10 });
             setTeam(response.data.data || []);
+            if (response.data.pagination) {
+                setTotalPages(response.data.pagination.totalPages || 1);
+            }
         } catch (error) {
             console.error('Error fetching team:', error);
-            // Use dummy data for demo
-            setTeam([
-                { _id: '1', name: 'Suparmo, S.E.', position: 'Direktur Utama', image: 'https://bankwonogiri.co.id/assets/wng/img/photos/mamok.png' },
-                { _id: '2', name: 'Budi Santoso', position: 'Direktur', image: '' },
-                { _id: '3', name: 'Sri Wahyuni', position: 'Kepala Cabang', image: '' },
-            ]);
+            setTeam([]);
         } finally {
             setLoading(false);
         }
     };
 
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
+
     useEffect(() => {
-        fetchTeam();
-    }, []);
+        fetchTeam(currentPage);
+    }, [currentPage]);
 
     // Handle form submit
     const handleSubmit = async (e) => {
@@ -271,6 +276,13 @@ const TeamPage = () => {
                     )}
                 </CardContent>
             </Card>
+
+            {/* Pagination */}
+            <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+            />
 
             {/* Add/Edit Modal */}
             <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>

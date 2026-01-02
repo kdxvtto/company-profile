@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Plus, Pencil, Trash2, FileText, Upload, Download, Loader2 } from 'lucide-react';
 import { publicationsAPI } from '@/lib/api';
+import Pagination from '@/components/admin/Pagination';
 
 const PublicationsPage = () => {
     const [publications, setPublications] = useState([]);
@@ -8,6 +9,8 @@ const PublicationsPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingId, setEditingId] = useState(null);
     const [saving, setSaving] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
     const [formData, setFormData] = useState({
         name: '',
         category: 'Laporan',
@@ -15,19 +18,26 @@ const PublicationsPage = () => {
     });
 
     useEffect(() => {
-        fetchPublications();
-    }, []);
+        fetchPublications(currentPage);
+    }, [currentPage]);
 
-    const fetchPublications = async () => {
+    const fetchPublications = async (page = 1) => {
         try {
             setLoading(true);
-            const response = await publicationsAPI.getAll();
+            const response = await publicationsAPI.getAll({ page, limit: 10 });
             setPublications(response.data.data || []);
+            if (response.data.pagination) {
+                setTotalPages(response.data.pagination.totalPages || 1);
+            }
         } catch (error) {
             console.error('Error fetching publications:', error);
         } finally {
             setLoading(false);
         }
+    };
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
     };
 
     const handleSubmit = async (e) => {
@@ -51,7 +61,7 @@ const PublicationsPage = () => {
             setIsModalOpen(false);
             setEditingId(null);
             setFormData({ name: '', category: 'Laporan', file: null });
-            fetchPublications();
+            fetchPublications(currentPage);
         } catch (error) {
             console.error('Error saving publication:', error);
             alert('Gagal menyimpan publikasi');
@@ -75,7 +85,7 @@ const PublicationsPage = () => {
 
         try {
             await publicationsAPI.delete(id);
-            fetchPublications();
+            fetchPublications(currentPage);
         } catch (error) {
             console.error('Error deleting publication:', error);
             alert('Gagal menghapus publikasi');
@@ -246,6 +256,13 @@ const PublicationsPage = () => {
                     </>
                 )}
             </div>
+
+            {/* Pagination */}
+            <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+            />
 
             {/* Modal */}
             {isModalOpen && (

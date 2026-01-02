@@ -12,6 +12,7 @@ import {
     DialogFooter,
 } from '@/components/ui/dialog';
 import { newsAPI } from '@/lib/api';
+import Pagination from '@/components/admin/Pagination';
 
 // Base URL untuk gambar dari backend
 const API_BASE_URL = 'http://localhost:3000';
@@ -38,6 +39,8 @@ const NewsPage = () => {
         image: null,
     });
     const [submitting, setSubmitting] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
 
     // Format date
     const formatDate = (dateString) => {
@@ -49,27 +52,29 @@ const NewsPage = () => {
     };
 
     // Fetch news data
-    const fetchNews = async () => {
+    const fetchNews = async (page = 1) => {
         try {
             setLoading(true);
-            const response = await newsAPI.getAll();
+            const response = await newsAPI.getAll({ page, limit: 10 });
             setNews(response.data.data || []);
+            if (response.data.pagination) {
+                setTotalPages(response.data.pagination.totalPages || 1);
+            }
         } catch (error) {
             console.error('Error fetching news:', error);
-            // Use dummy data for demo
-            setNews([
-                { _id: '1', title: 'Bank Wonogiri Raih Penghargaan Bank Sehat 2024', content: 'PT BPR BANK WONOGIRI berhasil meraih penghargaan sebagai Bank Sehat tahun 2024...', date: '2024-12-20', image: [] },
-                { _id: '2', title: 'Peluncuran Layanan Digital Baru', content: 'Dalam rangka meningkatkan pelayanan kepada nasabah, Bank Wonogiri meluncurkan...', date: '2024-12-15', image: [] },
-                { _id: '3', title: 'Program Kredit UMKM 2025', content: 'Bank Wonogiri membuka program kredit khusus untuk UMKM dengan bunga rendah...', date: '2024-12-10', image: [] },
-            ]);
+            setNews([]);
         } finally {
             setLoading(false);
         }
     };
 
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
+
     useEffect(() => {
-        fetchNews();
-    }, []);
+        fetchNews(currentPage);
+    }, [currentPage]);
 
     // Handle form submit
     const handleSubmit = async (e) => {
@@ -251,6 +256,13 @@ const NewsPage = () => {
                     )}
                 </CardContent>
             </Card>
+
+            {/* Pagination */}
+            <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+            />
 
             {/* Add/Edit Modal */}
             <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
