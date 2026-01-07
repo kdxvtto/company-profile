@@ -108,6 +108,8 @@ const GaleriPage = () => {
                                             <img
                                                 src={item.image[0]}
                                                 alt={item.title}
+                                                width={400}
+                                                height={300}
                                                 loading="lazy"
                                                 decoding="async"
                                                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
@@ -166,6 +168,8 @@ const GaleriPage = () => {
                             <img
                                 src={selectedImage.image?.[0]}
                                 alt={selectedImage.title}
+                                loading="eager"
+                                decoding="async"
                                 className="max-w-full max-h-[70vh] object-contain rounded-lg shadow-2xl"
                             />
                         </div>

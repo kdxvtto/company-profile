@@ -89,6 +89,10 @@ const KegiatanPage = () => {
                                             <img
                                                 src={getImageUrl(item.image[0])}
                                                 alt={item.title}
+                                                width={400}
+                                                height={192}
+                                                loading="lazy"
+                                                decoding="async"
                                                 className="w-full h-full object-cover"
                                             />
                                         ) : (

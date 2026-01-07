@@ -78,6 +78,10 @@ const TeamPublicPage = () => {
                                             <img
                                                 src={getImageUrl(member.image)}
                                                 alt={member.name}
+                                                width={200}
+                                                height={200}
+                                                loading="lazy"
+                                                decoding="async"
                                                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                             />
                                         ) : (
