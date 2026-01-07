@@ -192,6 +192,10 @@ const Hero = () => {
                                                     <img
                                                         src={getImageUrl(service.image)}
                                                         alt={service.title}
+                                                        width={320}
+                                                        height={320}
+                                                        loading="eager"
+                                                        decoding="async"
                                                         className="w-full h-full object-cover"
                                                     />
                                                 </div>

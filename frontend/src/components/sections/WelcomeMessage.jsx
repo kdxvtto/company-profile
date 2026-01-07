@@ -16,6 +16,10 @@ const WelcomeMessage = () => {
                                 <img
                                     src="https://bankwonogiri.co.id/assets/wng/img/photos/mamok.png"
                                     alt="Suparmo, S.E. - Direktur Utama PT BPR BANK WONOGIRI"
+                                    width={300}
+                                    height={400}
+                                    loading="lazy"
+                                    decoding="async"
                                     className="w-full h-auto rounded-xl object-cover"
                                 />
                             </div>
