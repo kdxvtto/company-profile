@@ -7,6 +7,113 @@ import { uploadPublication } from "../config/cloudinary.js";
 
 const router = express.Router();
 
+/**
+ * @swagger
+ * /api/publication:
+ *   get:
+ *     summary: Get All Publications
+ *     tags: [Publication]
+ *     responses:
+ *       200:
+ *         description: Success
+ *       500:
+ *         description: Internal Server Error
+ */
+
+/**
+ * @swagger
+ * /api/publication/{id}:
+ *   get:
+ *     summary: Get Publication by ID
+ *     tags: [Publication]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Success
+ *       500:
+ *         description: Internal Server Error
+ */
+
+/**
+ * @swagger
+ * /api/publication:
+ *   post:
+ *     summary: Create Publication
+ *     tags: [Publication]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             $ref: '#/components/schemas/Publication'
+ *     responses:
+ *       201:
+ *         description: Success
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal Server Error
+ */
+
+/**
+ * @swagger
+ * /api/publication/{id}:
+ *   put:
+ *     summary: Update Publication by ID
+ *     tags: [Publication]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             $ref: '#/components/schemas/Publication'
+ *     responses:
+ *       200:
+ *         description: Success
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal Server Error
+ */
+
+/**
+ * @swagger
+ * /api/publication/{id}:
+ *   delete:
+ *     summary: Delete Publication by ID
+ *     tags: [Publication]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Success
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal Server Error
+ */
+
 router.get("/", getAllPublications);
 router.get("/:id", getPublicationById);
 router.post("/", verifyToken, uploadPublication.single("file"), validate(createPublicationSchema), createPublication);

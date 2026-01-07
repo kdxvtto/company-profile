@@ -24,6 +24,7 @@ import publicationRoutes from "./routes/publicationRouter.js";
 import galleryRoutes from "./routes/galleryRouter.js";  
 import activityRoutes from "./routes/activityRouter.js";
 import { errorHandler, notFoundHandler } from "./middlewares/errorHandler.js";
+import swaggerDocs from "./document/swagger.js";
 
 const app = express();
 
@@ -69,6 +70,9 @@ app.use("/api/activity", activityRoutes);
 app.get("/health", (req, res) => {
     res.status(200).json({ status: "ok", timestamp: new Date().toISOString() });
 });
+
+// Swagger API Documentation
+swaggerDocs(app);
 
 app.use(notFoundHandler);
 app.use(errorHandler);

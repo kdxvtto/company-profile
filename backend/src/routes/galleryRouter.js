@@ -6,6 +6,93 @@ import { uploadGallery } from "../config/cloudinary.js";
 import verifyToken from "../middlewares/verifyToken.js";
 
 const router = express.Router();
+/**
+ * @swagger
+ * /api/gallery:
+ *   post:
+ *     summary: Create Gallery
+ *     tags: [Gallery]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             $ref: '#/components/schemas/Gallery'
+ *     responses:
+ *       201:
+ *         description: Success
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal Server Error
+ */
+
+/**
+ * @swagger
+ * /api/gallery:
+ *   get:
+ *     summary: Get Gallery
+ *     tags: [Gallery]
+ *     responses:
+ *       200:
+ *         description: Success
+ *       500:
+ *         description: Internal Server Error
+ */
+
+/**
+ * @swagger
+ * /api/gallery/{id}:
+ *   put:
+ *     summary: Update Gallery
+ *     tags: [Gallery]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             $ref: '#/components/schemas/Gallery'
+ *     responses:
+ *       200:
+ *         description: Success
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal Server Error
+ */
+
+/**
+ * @swagger
+ * /api/gallery/{id}:
+ *   delete:
+ *     summary: Delete Gallery
+ *     tags: [Gallery]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Success
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal Server Error
+ */
 
 router.post("/", verifyToken, uploadGallery.single("image"), validate(createGallerySchema), createGallery);
 router.get("/", getGallery);
