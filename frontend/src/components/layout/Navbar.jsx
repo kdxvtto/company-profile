@@ -10,6 +10,66 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { searchAPI } from "@/lib/api";
 
+// Mobile Dropdown Component - untuk handle toggle submenu di mobile
+const MobileDropdown = ({ item, setIsOpen }) => {
+    const [isExpanded, setIsExpanded] = useState(false);
+
+    return (
+        <div className="space-y-1">
+            <button 
+                className="w-full flex items-center justify-between px-3 py-2 text-sm font-medium text-gray-600 hover:text-red-600 hover:bg-gray-50 rounded-md"
+                onClick={() => setIsExpanded(!isExpanded)}
+            >
+                {item.label}
+                <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} />
+            </button>
+            <div className={`pl-4 space-y-1 overflow-hidden transition-all duration-200 ${isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
+                {item.megamenu ? (
+                    item.dropdown.flatMap((cat, catIdx) => 
+                        cat.items
+                            .filter(subItem => !subItem.disabled)
+                            .map((subItem, subIdx) => 
+                                subItem.external ? (
+                                    <a
+                                        key={`${catIdx}-${subIdx}`}
+                                        href={subItem.href}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="block px-3 py-1.5 text-sm text-gray-500 hover:text-red-600"
+                                        onClick={() => setIsOpen(false)}
+                                    >
+                                        {subItem.label} ↗
+                                    </a>
+                                ) : (
+                                    <Link
+                                        key={`${catIdx}-${subIdx}`}
+                                        to={subItem.href}
+                                        className="block px-3 py-1.5 text-sm text-gray-500 hover:text-red-600"
+                                        onClick={() => setIsOpen(false)}
+                                    >
+                                        {subItem.label}
+                                    </Link>
+                                )
+                            )
+                    )
+                ) : (
+                    item.dropdown.map((subItem, subIdx) => (
+                        <Link
+                            key={subIdx}
+                            to={subItem.href}
+                            className="block px-3 py-1.5 text-sm text-gray-500 hover:text-red-600"
+                            onClick={() => setIsOpen(false)}
+                        >
+                            {subItem.label}
+                        </Link>
+                    ))
+                )}
+            </div>
+        </div>
+    );
+};
+
+
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [searchOpen, setSearchOpen] = useState(false);
@@ -372,72 +432,39 @@ const Navbar = () => {
                 </div>
             </div>
 
-            {/* Mobile Menu */}
-            {isOpen && (
-                <div className="lg:hidden bg-white border-t border-gray-100 max-h-[calc(100vh-4rem)] overflow-y-auto">
-                    <div className="px-4 py-4 space-y-2">
-                        {menuItems.map((item, index) => (
-                            item.dropdown ? (
-                                <div key={index} className="space-y-1">
-                                    <button className="w-full text-left px-3 py-2 text-sm font-medium text-gray-600 hover:text-red-600 hover:bg-gray-50 rounded-md">
-                                        {item.label}
-                                    </button>
-                                    <div className="pl-4 space-y-1">
-                                        {item.megamenu ? (
-                                            item.dropdown.flatMap((cat, catIdx) => 
-                                                cat.items
-                                                    .filter(subItem => !subItem.disabled)
-                                                    .map((subItem, subIdx) => 
-                                                        subItem.external ? (
-                                                            <a
-                                                                key={`${catIdx}-${subIdx}`}
-                                                                href={subItem.href}
-                                                                target="_blank"
-                                                                rel="noopener noreferrer"
-                                                                className="block px-3 py-1.5 text-sm text-gray-500 hover:text-red-600"
-                                                                onClick={() => setIsOpen(false)}
-                                                            >
-                                                                {subItem.label} ↗
-                                                            </a>
-                                                        ) : (
-                                                            <Link
-                                                                key={`${catIdx}-${subIdx}`}
-                                                                to={subItem.href}
-                                                                className="block px-3 py-1.5 text-sm text-gray-500 hover:text-red-600"
-                                                                onClick={() => setIsOpen(false)}
-                                                            >
-                                                                {subItem.label}
-                                                            </Link>
-                                                        )
-                                                    )
-                                            )
-                                        ) : (
-                                            item.dropdown.map((subItem, subIdx) => (
-                                                <Link
-                                                    key={subIdx}
-                                                    to={subItem.href}
-                                                    className="block px-3 py-1.5 text-sm text-gray-500 hover:text-red-600"
-                                                    onClick={() => setIsOpen(false)}
-                                                >
-                                                    {subItem.label}
-                                                </Link>
-                                            ))
-                                        )}
-                                    </div>
-                                </div>
-                            ) : (
-                                <Link
-                                    key={index}
-                                    to={item.href}
-                                    className="block px-3 py-2 text-sm font-medium text-gray-600 hover:text-red-600 hover:bg-gray-50 rounded-md"
-                                    onClick={() => setIsOpen(false)}
-                                >
-                                    {item.label}
-                                </Link>
-                            )
-                        ))}
-                    </div>
+            {/* Mobile Menu - Fixed position so it doesn't shift navbar */}
+            <div 
+                className={`lg:hidden fixed top-16 left-0 right-0 bg-white border-t border-gray-100 shadow-lg transition-all duration-300 ease-in-out ${
+                    isOpen 
+                        ? 'opacity-100 translate-y-0 pointer-events-auto' 
+                        : 'opacity-0 -translate-y-2 pointer-events-none'
+                }`}
+                style={{ maxHeight: 'calc(100vh - 4rem)' }}
+            >
+                <div className="px-4 py-4 space-y-2 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 5rem)' }}>
+                    {menuItems.map((item, index) => (
+                        item.dropdown ? (
+                            <MobileDropdown key={index} item={item} setIsOpen={setIsOpen} />
+                        ) : (
+                            <Link
+                                key={index}
+                                to={item.href}
+                                className="block px-3 py-2 text-sm font-medium text-gray-600 hover:text-red-600 hover:bg-gray-50 rounded-md"
+                                onClick={() => setIsOpen(false)}
+                            >
+                                {item.label}
+                            </Link>
+                        )
+                    ))}
                 </div>
+            </div>
+            
+            {/* Overlay when mobile menu is open */}
+            {isOpen && (
+                <div 
+                    className="lg:hidden fixed inset-0 top-16 bg-black/20 z-[-1]"
+                    onClick={() => setIsOpen(false)}
+                />
             )}
         </nav>
     );
