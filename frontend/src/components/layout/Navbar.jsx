@@ -206,7 +206,7 @@ const Navbar = () => {
                     <div className="hidden lg:flex items-center gap-1">
                         {menuItems.map((item, index) => (
                             item.dropdown ? (
-                                <DropdownMenu key={index}>
+                                <DropdownMenu key={index} modal={false}>
                                     <DropdownMenuTrigger asChild>
                                         <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-600 hover:text-red-600 hover:bg-gray-50 rounded-md transition-colors">
                                             {item.label}

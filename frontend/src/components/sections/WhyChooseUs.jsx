@@ -1,11 +1,11 @@
-import { 
-    Percent, 
-    Store, 
-    ShieldCheck, 
-    CreditCard, 
-    Zap, 
-    Heart, 
-    Lightbulb 
+import {
+    Percent,
+    Store,
+    ShieldCheck,
+    CreditCard,
+    Zap,
+    Heart,
+    Lightbulb
 } from "lucide-react";
 
 const WhyChooseUs = () => {
@@ -120,7 +120,7 @@ const WhyChooseUs = () => {
                             return (
                                 <div
                                     key={index}
-                                    className="group relative overflow-hidden rounded-2xl bg-gradient-to-r p-[2px] hover:p-[3px] transition-all duration-300"
+                                    className="group relative overflow-hidden rounded-2xl bg-gradient-to-r p-[2px] hover:shadow-xl transition-all duration-300"
                                     style={{
                                         backgroundImage: `linear-gradient(to right, var(--tw-gradient-stops))`,
                                     }}
