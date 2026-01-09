@@ -185,25 +185,69 @@ const Hero = () => {
                                             </div>
                                         </div>
 
-                                        {/* Illustration/Image */}
-                                        <div className="hidden lg:flex justify-center items-center">
+                                        {/* Illustration/Image - Unique Design */}
+                                        <div className="hidden lg:flex justify-center items-center relative">
+                                            {/* Floating decorative elements */}
+                                            <div className="absolute -top-8 -right-8 w-24 h-24 bg-white/10 rounded-full blur-sm animate-float" style={{ animationDelay: '0s' }} />
+                                            <div className="absolute -bottom-6 -left-10 w-20 h-20 bg-white/15 rounded-full blur-sm animate-float" style={{ animationDelay: '1s' }} />
+                                            <div className="absolute top-1/2 -right-12 w-16 h-16 bg-white/10 rounded-full blur-sm animate-float" style={{ animationDelay: '2s' }} />
+                                            
+                                            {/* Animated gradient ring */}
+                                            <div className="absolute inset-0 flex items-center justify-center">
+                                                <div className="w-[420px] h-[420px] rounded-full border-2 border-dashed border-white/20 animate-spin-slow" />
+                                            </div>
+                                            <div className="absolute inset-0 flex items-center justify-center">
+                                                <div className="w-[380px] h-[380px] rounded-full border border-white/10" />
+                                            </div>
+
                                             {service.image ? (
-                                                <div className="w-80 h-80 rounded-3xl overflow-hidden shadow-2xl">
-                                                    <img
-                                                        src={getImageUrl(service.image)}
-                                                        alt={service.title}
-                                                        width={320}
-                                                        height={320}
-                                                        loading="eager"
-                                                        decoding="async"
-                                                        className="w-full h-full object-cover"
-                                                    />
+                                                <div className="relative group">
+                                                    {/* Blob shape background */}
+                                                    <div className="absolute -inset-4 bg-gradient-to-br from-white/30 to-white/5 rounded-[60px_30px_60px_30px] rotate-6 group-hover:rotate-12 transition-transform duration-500" />
+                                                    
+                                                    {/* Main image container with unique shape */}
+                                                    <div className="relative w-80 h-80 overflow-hidden shadow-2xl" style={{ borderRadius: '30% 70% 70% 30% / 30% 30% 70% 70%' }}>
+                                                        {/* Inner glow effect */}
+                                                        <div className="absolute inset-0 bg-gradient-to-tr from-white/20 via-transparent to-transparent z-10" />
+                                                        <img
+                                                            src={getImageUrl(service.image)}
+                                                            alt={service.title}
+                                                            width={320}
+                                                            height={320}
+                                                            loading="eager"
+                                                            decoding="async"
+                                                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                                                        />
+                                                    </div>
+                                                    
+                                                    {/* Floating badge */}
+                                                    <div className="absolute -bottom-4 -right-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-full shadow-lg flex items-center gap-2 animate-bounce-gentle">
+                                                        <span className="text-2xl">{getCategoryIcon(service.category)}</span>
+                                                        <span className="text-sm font-semibold text-gray-800">{service.category || 'Layanan'}</span>
+                                                    </div>
                                                 </div>
                                             ) : (
-                                                <div className="w-80 h-80 bg-white/10 backdrop-blur-sm rounded-3xl flex items-center justify-center">
-                                                    <span className="text-9xl">
-                                                        {getCategoryIcon(service.category)}
-                                                    </span>
+                                                <div className="relative group">
+                                                    {/* Blob shape background */}
+                                                    <div className="absolute -inset-4 bg-gradient-to-br from-white/30 to-white/5 rounded-[60px_30px_60px_30px] rotate-6 group-hover:rotate-12 transition-transform duration-500" />
+                                                    
+                                                    {/* Main container with unique shape */}
+                                                    <div className="relative w-80 h-80 bg-white/10 backdrop-blur-sm flex items-center justify-center overflow-hidden" style={{ borderRadius: '30% 70% 70% 30% / 30% 30% 70% 70%' }}>
+                                                        {/* Inner gradient */}
+                                                        <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-white/5" />
+                                                        {/* Icon */}
+                                                        <span className="text-9xl relative z-10 group-hover:scale-110 transition-transform duration-500">
+                                                            {getCategoryIcon(service.category)}
+                                                        </span>
+                                                        {/* Decorative circles */}
+                                                        <div className="absolute top-6 right-6 w-12 h-12 border-2 border-white/30 rounded-full" />
+                                                        <div className="absolute bottom-8 left-8 w-8 h-8 bg-white/20 rounded-full" />
+                                                    </div>
+                                                    
+                                                    {/* Floating badge */}
+                                                    <div className="absolute -bottom-4 -right-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-full shadow-lg flex items-center gap-2 animate-bounce-gentle">
+                                                        <span className="text-sm font-semibold text-gray-800">{service.category || 'Layanan'}</span>
+                                                    </div>
                                                 </div>
                                             )}
                                         </div>
